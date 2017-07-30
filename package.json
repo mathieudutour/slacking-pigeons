@@ -1,0 +1,22 @@
+{
+  "name": "slacking-pigeons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd client && npm install && cd .. && cd server && npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/micro": "^7.3.0",
+    "@types/react-dom": "^15.5.1",
+    "@types/react-textarea-autosize": "^4.3.1",
+    "@types/socket.io": "^1.4.29",
+    "@types/socket.io-client": "^1.4.29",
+    "tslint": "^5.5.0",
+    "tslint-react": "^3.1.0",
+    "typescript": "^2.4.2"
+  }
+}
