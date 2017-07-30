@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import {TUser} from './NetworkHOC'
+import replaceEmojis from './emojis'
 
 const MessageContainer = styled.div`
   padding: 0 35px 40px;
@@ -38,7 +39,29 @@ const Avatar = styled.div`
   overflow: hidden;
 `
 
-export default class Message extends React.Component<{id: string, sent?: boolean, received?: boolean, text: string, user: TUser, group?: boolean}, {}> {
+type Props = {id: string, sent?: boolean, received?: boolean, text: string, user: TUser, group?: boolean}
+
+export default class Message extends React.Component<Props, {text: string}> {
+  constructor(props: Props) {
+    super(props)
+
+    this.state = {
+      text: replaceEmojis(props.text)
+    }
+  }
+
+  componentShouldUpdate(nextProps: Props) {
+    return nextProps.text !== this.props.text || nextProps.user.id !== this.props.user.id
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.text !== this.props.text) {
+      this.setState({
+        text: replaceEmojis(nextProps.text)
+      })
+    }
+  }
+
   render () {
     return (
       <MessageContainer style={this.props.group ? {
@@ -46,11 +69,11 @@ export default class Message extends React.Component<{id: string, sent?: boolean
       } : undefined}>
         {this.props.user.id === 'me'
         ? <OutgoingMessage>
-            <Comment>{this.props.text}</Comment>
+            <Comment>{this.state.text}</Comment>
           </OutgoingMessage>
         : <IncomingMessage>
             {!this.props.group && <Avatar><img src={this.props.user.avatar} /></Avatar>}
-            <Comment style={{color: '#263238', background: '#f4f7f9'}}>{this.props.text}</Comment>
+            <Comment style={{color: '#263238', background: '#f4f7f9'}}>{this.state.text}</Comment>
           </IncomingMessage>}
         <div style={{clear: 'both'}}/>
       </MessageContainer>

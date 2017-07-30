@@ -18,9 +18,9 @@ ngrok http 4000
 TODO:
 - [x] copy at the top
 - [x] scroll to bottom when adding a message
-- [ ] emoji
+- [x] emoji
 - [ ] load history
-- [ ] figure out bot id
+- [ ] figure out how to find bot id
 - [ ] handle update message
 - [ ] animate opening and new message
 - [ ] tooltip with the name of the user
