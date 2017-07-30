@@ -1,6 +1,5 @@
 export default function replaceSlackEmojis(s: string) {
   return s.replace(/:([0-9a-z_]+):/g, (match, p1: string) => {
-    console.log(p1)
     return emojis[p1] || p1
   })
 }

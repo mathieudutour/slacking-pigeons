@@ -19,8 +19,8 @@ TODO:
 - [x] copy at the top
 - [x] scroll to bottom when adding a message
 - [x] emoji
-- [ ] load history
-- [ ] figure out how to find bot id
+- [x] load history
+- [x] figure out how to find bot id
 - [ ] handle update message
 - [ ] animate opening and new message
 - [ ] tooltip with the name of the user

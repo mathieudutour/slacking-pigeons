@@ -50,7 +50,7 @@ export default class Message extends React.Component<Props, {text: string}> {
     }
   }
 
-  componentShouldUpdate(nextProps: Props) {
+  shouldComponentUpdate(nextProps: Props) {
     return nextProps.text !== this.props.text || nextProps.user.id !== this.props.user.id
   }
 

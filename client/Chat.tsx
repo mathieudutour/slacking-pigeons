@@ -55,13 +55,8 @@ class Chat extends React.Component<Props, {open: boolean}> {
     }
   }
 
-  componentDidMount() {
-
-  }
-
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.messages.length !== this.props.messages.length && this._messagesContainer) {
-      console.log(this._messagesContainer)
       if (this._messagesContainer.scrollHeight <= (this._messagesContainer.scrollTop + this._messagesContainer.offsetHeight)) {
         setTimeout(() => {
           if (this._messagesContainer) {
@@ -72,6 +67,11 @@ class Chat extends React.Component<Props, {open: boolean}> {
     }
   }
 
+  componentDidUpdate(prevProps: Props, prevState: {open: boolean}) {
+    if (this.state.open && !prevState.open && this._messagesContainer) {
+      this._messagesContainer.scrollTop = this._messagesContainer.scrollHeight
+    }
+  }
 
   render () {
     let previousMessage: TMessage

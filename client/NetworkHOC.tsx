@@ -34,11 +34,21 @@ export default (Chat: React.ComponentClass<{messages: TMessages, onSendMessage: 
       messages: []
     }
 
-    this._socket = SocketIOClient('http://localhost:4000' + '?socketId=' + getSocketId())
+    const socketId = getSocketId()
+
+    this._socket = SocketIOClient('http://localhost:4000' + '?socketId=' + socketId)
 
     this._socket.on('new message', this._onNewMessage)
     this._socket.on('sent message', this._onSentMessage)
     this._socket.on('received message', this._onReceivedMessage)
+
+    fetch('http://localhost:4000/history/' + socketId)
+    .then(res => res.json())
+    .then(messages => {
+      this.setState({
+        messages: messages.concat(this.state.messages)
+      })
+    })
   }
 
   componentWillUnmout() {

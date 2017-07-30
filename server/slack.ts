@@ -2,11 +2,11 @@ import axios from 'axios'
 import { IncomingMessage, ServerResponse} from 'http'
 import {json, text, send} from 'micro'
 
-import { IThread } from './monk'
+import { IThread, findSocket } from './monk'
 
-const BOT_ID = process.env.BOT_ID
+let BOT_ID: string
 const VERIFICATION_TOKEN = process.env.VERIFICATION_TOKEN
-const OAUTH_TOKEN = process.env.VERIFICATION_TOKEN
+const OAUTH_TOKEN = process.env.OAUTH_TOKEN
 const CHANNEL = encodeURIComponent(process.env.CHANNEL || '#support')
 
 type HANDLER_TYPE = 'newThread' | 'newMessage' | 'removeThread' | 'receivedMessage'
@@ -46,6 +46,16 @@ export function on (type: HANDLER_TYPE, callback: NEW_THREAD_HANDLER_TYPE | NEW_
   handlers[type].push(callback)
 }
 
+const GREET_MESSAGE = 'Hello! I\'ll post the questions from the users here, stay tune.'
+
+export async function greet () {
+  return axios({
+    method: 'post',
+    url: `https://slack.com/api/chat.postMessage?token=${OAUTH_TOKEN
+    }&text=${GREET_MESSAGE}&channel=${CHANNEL}`
+  })
+}
+
 export async function slackEventHandler (req: IncomingMessage, res: ServerResponse) {
   const body = await json(req) as {
     challenge: string,
@@ -82,8 +92,11 @@ export async function slackEventHandler (req: IncomingMessage, res: ServerRespon
     const event = body.event
     if (event.type === 'message') {
       const threadId = event.thread_ts
-      // if top level message
-      if (!threadId || event.thread_ts === event.ts) {
+
+      // if we greet and haven't a BOT_ID yet, it's most probably us
+      if (event.text === GREET_MESSAGE && event.bot_id && !BOT_ID) {
+        BOT_ID = event.bot_id
+      } else if (!threadId || event.thread_ts === event.ts) { // if top level message
         // if we sent the top message, then we need to associate the message id with the user
         const socketId = ((event.attachments || [])[0] || {}).footer
         if (isOurBot(event.bot_id) && socketId) {
@@ -254,4 +267,60 @@ function getSlackUser (userId: string): Promise<User> {
       avatar: res.profile.image_32
     }
   })
+}
+
+export async function getThreadHistory (req: IncomingMessage & {params: {[key: string]: string}}, res: ServerResponse) {
+  const socketId = req.params.socket
+  const thread = await findSocket(socketId)
+
+  if (!thread) {
+    return res.end('[]')
+  }
+
+  const replies = await axios({
+    method: 'post',
+    url: `https://slack.com/api/channels.replies?token=${OAUTH_TOKEN
+    }&thread_ts=${thread.threadId
+    }&channel=${CHANNEL}`
+  })
+
+  const messages = replies.data.messages
+
+  if (!BOT_ID) {
+    BOT_ID = messages[0].bot_id
+  }
+
+  const me = {
+    name: 'me',
+    id: 'me',
+    avatar: ''
+  }
+
+  const userIds = messages.map((m: any) => m.user).reduce((prev: {[key: string]: 1}, userId: string) => {
+    if (userId && !prev[userId]) {
+      prev[userId] = 1
+    }
+    return prev
+  }, {})
+
+  await Promise.all(Object.keys(userIds).map(userId => {
+    return getSlackUser(userId).then(user => users[userId] = user)
+  }))
+
+  const mappedMessages = messages.map((m: any, i: number) => {
+    if (i === 0) {
+      return {
+        user: me,
+        text: m.attachments[0].text,
+        id: m.ts
+      }
+    }
+    return {
+      user: m.user ? users[m.user] : me,
+      text: m.text,
+      id: m.ts
+    }
+  })
+
+  return res.end(JSON.stringify(mappedMessages))
 }

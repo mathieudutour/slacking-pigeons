@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "../node_modules/.bin/tsc --p ./tsconfig.json",
-    "start": "node dist/index.js"
+    "start": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN BOT_ID=$BOT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL node dist/index.js"
   },
   "author": "",
   "license": "ISC",
