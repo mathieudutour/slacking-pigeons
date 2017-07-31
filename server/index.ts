@@ -17,7 +17,7 @@ if (!process.env.OAUTH_TOKEN) {
 }
 
 const assets = {
-  html: fs.readFileSync(path.join(__dirname, '../index.html')),
+  html: fs.readFileSync(path.join(__dirname, './static/index.html')),
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'))
 }
 

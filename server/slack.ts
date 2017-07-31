@@ -42,8 +42,22 @@ function isOurBot (bot: string | undefined) {
   return bot && BOT_ID === bot
 }
 
-export function on (type: HANDLER_TYPE, callback: NEW_THREAD_HANDLER_TYPE | NEW_MESSAGE_HANDLER_TYPE | REMOVE_THREAD_HANDLER_TYPE) {
-  handlers[type].push(callback)
+function error(message: string): never {
+  throw new Error(message);
+}
+
+export function on (type: HANDLER_TYPE, callback: NEW_THREAD_HANDLER_TYPE | NEW_MESSAGE_HANDLER_TYPE | REMOVE_THREAD_HANDLER_TYPE | RECEIVED_MESSAGE_HANDLER_TYPE) {
+  if (type === 'newThread') {
+    handlers.newThread.push(callback as NEW_THREAD_HANDLER_TYPE)
+  } else if (type === 'newMessage') {
+    handlers.newMessage.push(callback as NEW_MESSAGE_HANDLER_TYPE)
+  } else if (type === 'removeThread') {
+    handlers.removeThread.push(callback as REMOVE_THREAD_HANDLER_TYPE)
+  } else if (type === 'receivedMessage') {
+    handlers.receivedMessage.push(callback as RECEIVED_MESSAGE_HANDLER_TYPE)
+  } else {
+    return error("unknown handler type");
+  }
 }
 
 const GREET_MESSAGE = 'Hello! I\'ll post the questions from the users here, stay tune.'

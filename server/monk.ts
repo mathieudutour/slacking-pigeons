@@ -1,4 +1,4 @@
-import Monk = require('monk')
+import Monk from 'monk'
 const monk = Monk(process.env.MONGO_URL || 'localhost:27017')
 
 const Threads = monk.get('threads')

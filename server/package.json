@@ -5,8 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "../node_modules/.bin/tsc --p ./tsconfig.json",
-    "start": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN BOT_ID=$BOT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL node dist/index.js"
+    "build": "../node_modules/.bin/tsc --p ./tsconfig.json && cp index.html dist/static/index.html",
+    "start": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL node dist/index.js",
+    "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
+    "serve": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL nodemon dist/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +16,11 @@
     "axios": "^0.16.2",
     "micro": "^7.3.3",
     "microrouter": "^2.2.1",
-    "monk": "^6.0.1",
+    "monk": "^6.0.3",
     "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.0",
+    "nodemon": "^1.11.0"
   }
 }
