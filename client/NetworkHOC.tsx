@@ -46,7 +46,14 @@ export default (Chat: React.ComponentClass<{messages: TMessages, onSendMessage: 
     .then(res => res.json())
     .then(messages => {
       this.setState({
-        messages: messages.concat(this.state.messages)
+        messages: messages.map((m: {user: TUser, text: string, id: string}) => {
+          return {
+            ...m,
+            read: true,
+            sent: true,
+            received: true
+          }
+        }).concat(this.state.messages)
       })
     })
   }

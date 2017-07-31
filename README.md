@@ -21,7 +21,12 @@ TODO:
 - [x] emoji
 - [x] load history
 - [x] figure out how to find bot id
-- [ ] handle update message
 - [ ] animate opening and new message
-- [ ] tooltip with the name of the user
 - [ ] figure our simple way to deploy
+
+LATER:
+- [ ] handle update message
+- [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team
+- [ ] tooltip with the name of the user
+- [ ] sent/received indicators
+- [ ] unread indicator
