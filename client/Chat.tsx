@@ -88,7 +88,7 @@ class Chat extends React.Component<Props, {open: boolean}> {
                 return <Message key={message.id} {...message} group={_previousMessage && message.user.id === _previousMessage.user.id} />
               })}
             </MessagesContainer>
-            <Input onSendMessage={this.props.onSendMessage} />
+            <Input onSendMessage={this.props.onSendMessage} alreadyAMessage={this.props.messages.length > 0} />
           </Container>
         )}
       </div>

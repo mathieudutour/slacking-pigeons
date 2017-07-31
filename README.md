@@ -27,6 +27,7 @@ TODO:
 LATER:
 - [ ] handle update message
 - [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team
+- [ ] enter email to receive replies if leaving
 - [ ] tooltip with the name of the user
 - [ ] sent/received indicators
 - [ ] unread indicator

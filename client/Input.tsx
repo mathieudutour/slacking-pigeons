@@ -31,12 +31,17 @@ const Textarea = styled(textarea)`
   }
 `
 
-export default class Input extends React.Component<{onSendMessage: (msg: string) => void}, {
+type Props = {
+  onSendMessage: (msg: string) => void,
+  alreadyAMessage: boolean
+}
+
+export default class Input extends React.Component<Props, {
   message: string,
   gooey: boolean
 }> {
-  constructor() {
-    super()
+  constructor(props: Props) {
+    super(props)
 
     this.state = {
       message: '',
@@ -50,7 +55,7 @@ export default class Input extends React.Component<{onSendMessage: (msg: string)
         <Textarea style={{
           minHeight: '55px',
           maxHeight: '200px'
-        }} value={this.state.message} onChange={this._onChange} onKeyDown={this._onKeyDown} />
+        }} placeholder={this.props.alreadyAMessage ? "Write a reply..." : "Write a question..."} value={this.state.message} onChange={this._onChange} onKeyDown={this._onKeyDown} />
         <div className="chat-send" onClick={this._onSendMessage}>
           <i className="fa fa-paper-plane"></i>
         </div>
