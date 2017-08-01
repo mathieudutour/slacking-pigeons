@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { IncomingMessage, ServerResponse} from 'http'
-import { json, send} from 'micro'
+import { IncomingMessage, ServerResponse } from 'http'
+import { json, send } from 'micro'
 import { VERIFICATION_TOKEN } from './constants'
 import { parseUrlForQuery } from './_parseQuery'
 import { CLIENT_ID, CLIENT_SECRET } from './constants'
@@ -16,14 +16,12 @@ export async function addNewTeam(req: IncomingMessage, res: ServerResponse) {
   }
 
   const body = (await axios({
-      method: 'post',
-      url: `https://slack.com/api/oauth.access?code=${query.code
-      }&client_id=${CLIENT_ID
-      }&client_secret=${CLIENT_SECRET}`
-    }).then((res) => res.data)) as {
-    error?: string,
-    access_token: string,
-    team_id: string,
+    method: 'post',
+    url: `https://slack.com/api/oauth.access?code=${query.code}&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
+  }).then(res => res.data)) as {
+    error?: string
+    access_token: string
+    team_id: string
     incoming_webhook: {
       channel_id: string
     }
@@ -37,7 +35,7 @@ export async function addNewTeam(req: IncomingMessage, res: ServerResponse) {
   const team = {
     teamId: body.team_id,
     token: body.access_token,
-    channel: body.incoming_webhook.channel_id
+    channel: body.incoming_webhook.channel_id,
   }
 
   console.log(await createOrUpdateNewTeam(team))

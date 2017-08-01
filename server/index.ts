@@ -1,13 +1,13 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { IncomingMessage, ServerResponse} from 'http'
+import { IncomingMessage, ServerResponse } from 'http'
 import micro from 'micro'
-import {router, get, post} from 'microrouter'
+import { router, get, post } from 'microrouter'
 import * as SocketIO from 'socket.io'
 import * as slack from './slack'
 import * as monk from './monk'
-import Websocket from './websocket-server'
-import cors from './cors'
+import { Websocket } from './websocket-server'
+import { cors } from './cors'
 
 if (!process.env.CLIENT_ID) {
   console.error('missing slack client ID')
@@ -21,34 +21,50 @@ if (!process.env.CLIENT_SECRET) {
 
 const assets = {
   html: fs.readFileSync(path.join(__dirname, './static/index.html')),
-  js: fs.readFileSync(path.join(__dirname, './static/bundle.js'))
+  js: fs.readFileSync(path.join(__dirname, './static/bundle.js')),
 }
 
-const staticServing = (key: 'html' | 'js') => async (req: IncomingMessage, res: ServerResponse) => {
+const staticServing = (key: 'html' | 'js') => async (
+  req: IncomingMessage,
+  res: ServerResponse
+) => {
   console.log('Serving asset')
   res.end(assets[key])
 }
 
-const server = micro(cors(router(
-  get('/', staticServing('html')),
-  get('/bundle.js', staticServing('js')),
-  get('/history/:team/:socket', slack.getThreadHistory),
-  get('/slack-oauth-callback', slack.addNewTeam),
-  post('/slack-incoming', slack.slackEventHandler),
-  post('/slack-action', slack.slackActionHandler)
-)))
+const server = micro(
+  cors(
+    router(
+      get('/', staticServing('html')),
+      get('/bundle.js', staticServing('js')),
+      get('/history/:team/:socket', slack.getThreadHistory),
+      get('/slack-oauth-callback', slack.addNewTeam),
+      post('/slack-incoming', slack.slackEventHandler),
+      post('/slack-action', slack.slackActionHandler)
+    )
+  )
+)
 
 const io = SocketIO(server)
 const websocket = Websocket(io)
 
-slack.on('newThread', (thread: {teamId: string, text: string, threadId: string, socketId: string, id: string}) => {
-  monk.createNewThread({
-    teamId: thread.teamId,
-    threadId: thread.threadId,
-    socketId: thread.socketId
-  })
-  websocket.acknowledgeReception(thread)
-})
+slack.on(
+  'newThread',
+  (thread: {
+    teamId: string
+    text: string
+    threadId: string
+    socketId: string
+    id: string
+  }) => {
+    monk.createNewThread({
+      teamId: thread.teamId,
+      threadId: thread.threadId,
+      socketId: thread.socketId,
+    })
+    websocket.acknowledgeReception(thread)
+  }
+)
 slack.on('removeThread', monk.removeThread)
 slack.on('newMessage', websocket.answerUser)
 slack.on('receivedMessage', websocket.acknowledgeReception)
@@ -61,6 +77,7 @@ server.listen(port)
 console.log('Listening to ' + port)
 
 // Micro expects a function to be exported
-export default function () {
+// tslint:disable-next-line:no-default-export
+export default function() {
   console.log('YOLO')
 }

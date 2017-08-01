@@ -1,4 +1,4 @@
-import { IncomingMessage, ServerResponse} from 'http'
+import { IncomingMessage, ServerResponse } from 'http'
 import { RequestHandler } from 'micro'
 
 const DEFAULT_ALLOW_METHODS = [
@@ -7,7 +7,7 @@ const DEFAULT_ALLOW_METHODS = [
   'PUT',
   'PATCH',
   'DELETE',
-  'OPTIONS'
+  'OPTIONS',
 ].join(',')
 
 const DEFAULT_ALLOW_HEADERS = [
@@ -16,32 +16,20 @@ const DEFAULT_ALLOW_HEADERS = [
   'X-HTTP-Method-Override',
   'Content-Type',
   'Authorization',
-  'Accept'
+  'Accept',
 ].join(',')
 
 const DEFAULT_MAX_AGE_SECONDS = 60 * 60 * 24 // 24 hours
 
-export default function (handler: RequestHandler) {
+export function cors(handler: RequestHandler) {
   return (req: IncomingMessage, res: ServerResponse) => {
-    res.setHeader(
-      'Access-Control-Max-Age',
-      '' + DEFAULT_MAX_AGE_SECONDS
-    )
+    res.setHeader('Access-Control-Max-Age', '' + DEFAULT_MAX_AGE_SECONDS)
 
-    res.setHeader(
-      'Access-Control-Allow-Origin',
-      '*'
-    )
+    res.setHeader('Access-Control-Allow-Origin', '*')
 
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      DEFAULT_ALLOW_METHODS
-    )
+    res.setHeader('Access-Control-Allow-Methods', DEFAULT_ALLOW_METHODS)
 
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      DEFAULT_ALLOW_HEADERS
-    )
+    res.setHeader('Access-Control-Allow-Headers', DEFAULT_ALLOW_HEADERS)
 
     res.setHeader('Access-Control-Allow-Credentials', 'true')
 

@@ -32,55 +32,68 @@ const Textarea = styled(textarea)`
 `
 
 type Props = {
-  onSendMessage: (msg: string) => void,
+  onSendMessage: (msg: string) => void
   alreadyAMessage: boolean
 }
 
-export default class Input extends React.Component<Props, {
-  message: string,
-  gooey: boolean
-}> {
-  constructor(props: Props) {
+export class Input extends React.Component<
+  Props,
+  {
+    message: string
+    gooey: boolean
+  }
+> {
+  public constructor(props: Props) {
     super(props)
 
     this.state = {
       message: '',
-      gooey: false
+      gooey: false,
     }
   }
 
-  render () {
+  public render() {
     return (
       <div className="chat-input-bar">
-        <Textarea style={{
-          minHeight: '55px',
-          maxHeight: '200px'
-        }} placeholder={this.props.alreadyAMessage ? "Write a reply..." : "Write a question..."} value={this.state.message} onChange={this._onChange} onKeyDown={this._onKeyDown} />
+        <Textarea
+          style={{
+            minHeight: '55px',
+            maxHeight: '200px',
+          }}
+          placeholder={
+            this.props.alreadyAMessage
+              ? 'Write a reply...'
+              : 'Write a question...'
+          }
+          value={this.state.message}
+          onChange={this._onChange}
+          onKeyDown={this._onKeyDown}
+        />
         <div className="chat-send" onClick={this._onSendMessage}>
-          <i className="fa fa-paper-plane"></i>
+          <i className="fa fa-paper-plane" />
         </div>
       </div>
     )
   }
 
-  _onChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+  private _onChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
     this.setState({
-      message: e.currentTarget.value
+      message: e.currentTarget.value,
     })
   }
 
-  _onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  private _onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.keyCode === KEY_ENTER && !e.ctrlKey && !e.altKey && !e.shiftKey) {
       e.preventDefault()
       this._onSendMessage()
     }
   }
 
-  _onSendMessage = (e?: any) => {
+  private _onSendMessage = (e?: any) => {
     if (this.state.message) {
       this.props.onSendMessage(this.state.message)
       this.setState({
-        message: ''
+        message: '',
       })
     }
   }

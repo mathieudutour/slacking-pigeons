@@ -1,14 +1,14 @@
 import * as React from 'react'
 import * as SocketIOClient from 'socket.io-client'
 import styled from 'styled-components'
-import getSocketId from './storage'
-import Input from './Input'
-import Message from './Message'
-import ToggleButton from './ToggleButton'
-import NetworkHOC, {TMessages, TMessage} from './NetworkHOC'
+import { getSocketId } from './storage'
+import { Input } from './Input'
+import { Message } from './Message'
+import { ToggleButton } from './ToggleButton'
+import { NetworkHOC, TMessages, TMessage } from './NetworkHOC'
 
 type Props = {
-  messages: TMessages,
+  messages: TMessages
   onSendMessage: (msg: string) => void
 }
 
@@ -44,20 +44,26 @@ const IntroCopy = styled.p`
   opacity: 0.7;
 `
 
-class Chat extends React.Component<Props, {open: boolean}> {
-  _messagesContainer: HTMLDivElement | undefined;
+class Chat extends React.Component<Props, { open: boolean }> {
+  private _messagesContainer: HTMLDivElement | undefined
 
-  constructor(props: Props) {
+  public constructor(props: Props) {
     super(props)
 
     this.state = {
-      open: false
+      open: false,
     }
   }
 
-  componentWillReceiveProps(nextProps: Props) {
-    if (nextProps.messages.length !== this.props.messages.length && this._messagesContainer) {
-      if (this._messagesContainer.scrollHeight <= (this._messagesContainer.scrollTop + this._messagesContainer.offsetHeight)) {
+  public componentWillReceiveProps(nextProps: Props) {
+    if (
+      nextProps.messages.length !== this.props.messages.length &&
+      this._messagesContainer
+    ) {
+      if (
+        this._messagesContainer.scrollHeight <=
+        this._messagesContainer.scrollTop + this._messagesContainer.offsetHeight
+      ) {
         setTimeout(() => {
           if (this._messagesContainer) {
             this._messagesContainer.scrollTop = this._messagesContainer.scrollHeight
@@ -67,39 +73,55 @@ class Chat extends React.Component<Props, {open: boolean}> {
     }
   }
 
-  componentDidUpdate(prevProps: Props, prevState: {open: boolean}) {
+  public componentDidUpdate(prevProps: Props, prevState: { open: boolean }) {
     if (this.state.open && !prevState.open && this._messagesContainer) {
       this._messagesContainer.scrollTop = this._messagesContainer.scrollHeight
     }
   }
 
-  render () {
+  public render() {
     let previousMessage: TMessage
     return (
       <div>
-        <ToggleButton open={this.state.open} onClick={this._toggleOpen}/>
-        {this.state.open && (
+        <ToggleButton open={this.state.open} onClick={this._toggleOpen} />
+        {this.state.open &&
           <Container>
-            <MessagesContainer innerRef={(c: HTMLDivElement) => this._messagesContainer = c}>
-              <IntroCopy>Hey there! Let us know if you have any questions! We'd be happy to help.</IntroCopy>
+            <MessagesContainer innerRef={this._onRef}>
+              <IntroCopy>
+                Hey there! Let us know if you have any questions! We'd be happy
+                to help.
+              </IntroCopy>
               {this.props.messages.map(message => {
                 const _previousMessage = previousMessage
                 previousMessage = message
-                return <Message key={message.id} {...message} group={_previousMessage && message.user.id === _previousMessage.user.id} />
+                return (
+                  <Message
+                    key={message.id}
+                    {...message}
+                    group={
+                      _previousMessage &&
+                      message.user.id === _previousMessage.user.id
+                    }
+                  />
+                )
               })}
             </MessagesContainer>
-            <Input onSendMessage={this.props.onSendMessage} alreadyAMessage={this.props.messages.length > 0} />
-          </Container>
-        )}
+            <Input
+              onSendMessage={this.props.onSendMessage}
+              alreadyAMessage={this.props.messages.length > 0}
+            />
+          </Container>}
       </div>
     )
   }
 
-  _toggleOpen = () => {
+  private _onRef = (c: HTMLDivElement) => (this._messagesContainer = c)
+
+  private _toggleOpen = () => {
     this.setState({
-      open: !this.state.open
+      open: !this.state.open,
     })
   }
 }
 
-export default NetworkHOC(process.env.TEAM_ID!)(Chat)
+export const HookedChat = NetworkHOC(process.env.TEAM_ID!)(Chat)

@@ -1,8 +1,8 @@
-var socketId: string
+let socketId: string
 
 const STORAGE_KEY = '__slacking_pigeons_socketId'
 
-export default function getSocketId () {
+export function getSocketId() {
   if (socketId) {
     return socketId
   }
@@ -12,6 +12,7 @@ export default function getSocketId () {
     socketId = localStorage[STORAGE_KEY]
   } else {
     // create a new ID
+    // tslint:disable-next-line:insecure-random
     socketId = (Date.now() + Date.now() * Math.random()).toFixed(0)
     localStorage[STORAGE_KEY] = socketId
   }

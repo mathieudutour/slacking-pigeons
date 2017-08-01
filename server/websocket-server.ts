@@ -2,17 +2,17 @@ import { findSocket, findThread, IThread, findTeam, ITeam } from './monk'
 import { postNewMessage, answerInThread, User } from './slack'
 import * as SocketIO from 'socket.io'
 
-function getSocketId (socket: SocketIO.Socket): string | undefined {
+function getSocketId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).socketId
 }
 
-function getTeamId (socket: SocketIO.Socket): string | undefined {
+function getTeamId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).teamId
 }
 
-export default function (io: SocketIO.Server) {
+export function Websocket(io: SocketIO.Server) {
   return {
-    startServer () {
+    startServer() {
       io.on('connection', socket => {
         const socketId = getSocketId(socket)
         const teamId = getTeamId(socket)
@@ -56,48 +56,86 @@ export default function (io: SocketIO.Server) {
             postNewMessage(team, msg, socketId)
           }
 
-          socket.emit('sent message', JSON.stringify({
-            text: msg
-          }))
+          socket.emit(
+            'sent message',
+            JSON.stringify({
+              text: msg,
+            })
+          )
         })
       })
     },
 
-    answerUser ({teamId, user, text, threadId, id}: {teamId: string, user: User, text: string, threadId: string, id: string}) {
+    answerUser({
+      teamId,
+      user,
+      text,
+      threadId,
+      id,
+    }: {
+      teamId: string
+      user: User
+      text: string
+      threadId: string
+      id: string
+    }) {
       return findThread(threadId, teamId).then(res => {
         if (res) {
-          let socket = Object.keys(io.sockets.sockets).find(k => {
+          const socket = Object.keys(io.sockets.sockets).find(k => {
             return getSocketId(io.sockets.sockets[k]) === res.socketId
           })
 
           if (socket) {
-            io.sockets.sockets[socket].emit('new message', JSON.stringify({
-              user, text, id
-            }))
+            io.sockets.sockets[socket].emit(
+              'new message',
+              JSON.stringify({
+                user,
+                text,
+                id,
+              })
+            )
           }
         }
       })
     },
 
-    acknowledgeReception({teamId, text, id, threadId, socketId}: {teamId: string, text: string, id: string, threadId: string, socketId?: string}) {
-      return Promise.resolve().then(() => {
-        if (socketId) {
-          return {socketId, threadId: '', teamId}
-        }
-        return findThread(threadId, teamId)
-      }).then((res) => {
-        if (res) {
-          let socket = Object.keys(io.sockets.sockets).find(k => {
-            return getSocketId(io.sockets.sockets[k]) === res.socketId
-          })
-
-          if (socket) {
-            io.sockets.sockets[socket].emit('received message', JSON.stringify({
-              text, id
-            }))
+    acknowledgeReception({
+      teamId,
+      text,
+      id,
+      threadId,
+      socketId,
+    }: {
+      teamId: string
+      text: string
+      id: string
+      threadId: string
+      socketId?: string
+    }) {
+      return Promise.resolve()
+        .then(() => {
+          if (socketId) {
+            return { socketId, threadId: '', teamId }
           }
-        }
-      })
-    }
+          return findThread(threadId, teamId)
+        })
+        .then(res => {
+          if (res) {
+            const socket = Object.keys(io.sockets.sockets).find(k => {
+              return getSocketId(io.sockets.sockets[k]) === res.socketId
+            })
+
+            if (socket) {
+              io.sockets.sockets[socket].emit(
+                'received message',
+                JSON.stringify({
+                  text,
+                  id,
+                })
+              )
+            }
+          }
+        })
+    },
   }
 }

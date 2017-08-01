@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { IncomingMessage, ServerResponse} from 'http'
+import { IncomingMessage, ServerResponse } from 'http'
 import { json, send } from 'micro'
 import { VERIFICATION_TOKEN } from './constants'
 import { GREET_MESSAGE } from './greet'
@@ -8,35 +8,40 @@ import { users, getSlackUser } from './users'
 
 import { findTeam, addBotIdToTeam, ITeam } from '../monk'
 
-function isOurBot (bot: string | undefined, team: ITeam) {
+function isOurBot(bot: string | undefined, team: ITeam) {
   return bot && team.bot_id === bot
 }
 
-export async function slackEventHandler (req: IncomingMessage, res: ServerResponse) {
-  const body = await json(req) as {
-    challenge: string,
-    token: string,
-    event: undefined,
-    team_id: string
-  } | {
-    challenge: undefined,
-    token: string,
-    team_id: string,
-    event: {
-      type: string,
-      thread_ts?: string,
-      ts: string,
-      bot_id?: string,
-      channel: string,
-      subtype?: string,
-      text: string,
-      user: string,
-      attachments: Array<{
-        footer?: string,
-        text: string
-      }>
-    }
-  }
+export async function slackEventHandler(
+  req: IncomingMessage,
+  res: ServerResponse
+) {
+  const body = (await json(req)) as
+    | {
+        challenge: string
+        token: string
+        event: undefined
+        team_id: string
+      }
+    | {
+        challenge: undefined
+        token: string
+        team_id: string
+        event: {
+          type: string
+          thread_ts?: string
+          ts: string
+          bot_id?: string
+          channel: string
+          subtype?: string
+          text: string
+          user: string
+          attachments: Array<{
+            footer?: string
+            text: string
+          }>
+        }
+      }
 
   if (body.token !== VERIFICATION_TOKEN) {
     res.end('weird, I dunno you')
@@ -63,7 +68,8 @@ export async function slackEventHandler (req: IncomingMessage, res: ServerRespon
       // if we greet and haven't a BOT_ID yet, it's most probably us
       if (event.text === GREET_MESSAGE && event.bot_id && !team.bot_id) {
         await addBotIdToTeam(team.teamId, event.bot_id)
-      } else if (!threadId || event.thread_ts === event.ts) { // if top level message
+      } else if (!threadId || event.thread_ts === event.ts) {
+        // if top level message
         // if we sent the top message, then we need to associate the message id with the user
         const socketId = ((event.attachments || [])[0] || {}).footer
         if (isOurBot(event.bot_id, team) && socketId) {
@@ -73,7 +79,7 @@ export async function slackEventHandler (req: IncomingMessage, res: ServerRespon
               text: event.attachments[0].text,
               id: event.ts,
               socketId,
-              threadId: event.ts
+              threadId: event.ts,
             })
           })
         }
@@ -91,7 +97,7 @@ export async function slackEventHandler (req: IncomingMessage, res: ServerRespon
             user,
             text: event.text,
             threadId,
-            id: event.ts
+            id: event.ts,
           })
         })
       } else if (isOurBot(event.bot_id, team) && threadId) {
@@ -100,7 +106,7 @@ export async function slackEventHandler (req: IncomingMessage, res: ServerRespon
             teamId: team.teamId,
             text: event.text,
             id: event.ts,
-            threadId
+            threadId,
           })
         })
       }

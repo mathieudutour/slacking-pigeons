@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd client && npm install && cd .. && cd server && npm install"
+    "postinstall": "cd client && npm install && cd .. && cd server && npm install",
+    "lint": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs tslint",
+    "prettier:base": "prettier --single-quote --trailing-comma es5 --no-semi --write",
+    "prettify": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs npm run prettier:base"
   },
   "author": "",
   "license": "ISC",
@@ -15,8 +18,12 @@
     "@types/react-textarea-autosize": "^4.3.1",
     "@types/socket.io": "^1.4.29",
     "@types/socket.io-client": "^1.4.29",
+    "prettier": "^1.5.3",
     "tslint": "^5.5.0",
+    "tslint-config-prettier": "^1.3.0",
+    "tslint-microsoft-contrib": "^5.0.1",
     "tslint-react": "^3.1.0",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "vrsource-tslint-rules": "^5.1.0"
   }
 }
