@@ -8,10 +8,13 @@
     "postinstall": "cd client && npm install && cd .. && cd server && npm install",
     "lint": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs tslint",
     "prettier:base": "prettier --single-quote --trailing-comma es5 --no-semi --write",
-    "prettify": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs npm run prettier:base"
+    "prettify": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs npm run prettier:base",
+    "start": "cd server && npm run start",
+    "build": "cd client && npm run build:prod && cd ../server && npm run build",
+    "deploy": "source .env.prod && SERVER_HOST=$SERVER_HOST TEAM_ID=$TEAM_ID npm run build && cd server/dist && now --public -e SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL && now alias"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/micro": "^7.3.0",
     "@types/react-dom": "^15.5.1",

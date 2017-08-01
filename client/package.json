@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "slacking-pigeons",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "build:prod": "webpack -p"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "react": "^15.6.1",
     "react-dom": "^15.6.1",

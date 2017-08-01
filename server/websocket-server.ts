@@ -16,7 +16,6 @@ export function Websocket(io: SocketIO.Server) {
       io.on('connection', socket => {
         const socketId = getSocketId(socket)
         const teamId = getTeamId(socket)
-        console.log('a user connected ' + socketId)
 
         if (!socketId) {
           console.log('no socketId, ignore')
@@ -32,7 +31,7 @@ export function Websocket(io: SocketIO.Server) {
         let team: ITeam
 
         socket.on('disconnect', () => {
-          console.log('user disconnected')
+          // console.log('user disconnected')
         })
 
         socket.on('chat message', async (msg: string) => {

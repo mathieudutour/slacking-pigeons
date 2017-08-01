@@ -9,12 +9,12 @@ import * as monk from './monk'
 import { Websocket } from './websocket-server'
 import { cors } from './cors'
 
-if (!process.env.CLIENT_ID) {
+if (!process.env.SLACK_CLIENT_ID) {
   console.error('missing slack client ID')
   process.exit(1)
 }
 
-if (!process.env.CLIENT_SECRET) {
+if (!process.env.SLACK_CLIENT_SECRET) {
   console.error('missing slack client secret')
   process.exit(1)
 }

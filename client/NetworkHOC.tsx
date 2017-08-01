@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as SocketIOClient from 'socket.io-client'
-import getSocketId from './storage'
+import { getSocketId } from './storage'
 import { Input } from './Input'
 import { Message } from './Message'
 
@@ -46,14 +46,14 @@ export const NetworkHOC = (teamId: string) => (
       const socketId = getSocketId()
 
       this._socket = SocketIOClient(
-        'http://localhost:4000' + '?socketId=' + socketId + '&teamId=' + teamId
+        process.env.SERVER_HOST + '?socketId=' + socketId + '&teamId=' + teamId
       )
 
       this._socket.on('new message', this._onNewMessage)
       this._socket.on('sent message', this._onSentMessage)
       this._socket.on('received message', this._onReceivedMessage)
 
-      fetch('http://localhost:4000/history/' + teamId + '/' + socketId)
+      fetch(process.env.SERVER_HOST + '/history/' + teamId + '/' + socketId)
         .then(res => res.json())
         .then(messages => {
           this.setState({
@@ -120,7 +120,7 @@ export const NetworkHOC = (teamId: string) => (
       })
     }
 
-    private onReceivedMessage = (msg: string) => {
+    private _onReceivedMessage = (msg: string) => {
       const message = JSON.parse(msg) as {
         text: string
         id: string

@@ -21,10 +21,12 @@ TODO:
 - [x] emoji
 - [x] load history
 - [x] figure out how to find bot id
-- [ ] animate opening and new message
-- [ ] figure our simple way to deploy
+- [x] figure our simple way to deploy
+- [ ] landing page
+- [ ] success page with installation instruction
 
 LATER:
+- [ ] animate opening and new message
 - [ ] handle update message
 - [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team
 - [ ] enter email to receive replies if leaving

@@ -1,0 +1,27 @@
+{
+  "name": "slacking-pigeons",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "micro": "^7.3.3",
+    "microrouter": "^2.2.1",
+    "monk": "^6.0.3",
+    "socket.io": "^2.0.3"
+  },
+  "now": {
+    "alias": "slacking-pigeons",
+    "env": [
+      "SLACK_CLIENT_ID",
+      "SLACK_CLIENT_SECRET",
+      "MONGO_URL",
+      "SLACK_VERIFICATION_TOKEN"
+    ]
+  }
+}

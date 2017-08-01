@@ -38,7 +38,7 @@ export async function addNewTeam(req: IncomingMessage, res: ServerResponse) {
     channel: body.incoming_webhook.channel_id,
   }
 
-  console.log(await createOrUpdateNewTeam(team))
+  await createOrUpdateNewTeam(team)
   await greet(team)
 
   res.end('all good')

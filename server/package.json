@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cp index.html dist/static/index.html && ../node_modules/.bin/tsc --p ./tsconfig.json",
-    "start": "source ../.env && CLIENT_ID=$CLIENT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CLIENT_SECRET=$CLIENT_SECRET MONGO_URL=$MONGO_URL node dist/index.js",
+    "build": "cp index.html dist/static/index.html && cp deployed-package.json dist/package.json  && ../node_modules/.bin/tsc --p ./tsconfig.json",
+    "start": "node index.js",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
-    "serve": "source ../.env && CLIENT_ID=$CLIENT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CLIENT_SECRET=$CLIENT_SECRET MONGO_URL=$MONGO_URL nodemon dist/index.js"
+    "serve": "source ../.env && SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL nodemon dist/index.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
     "micro": "^7.3.3",
@@ -22,5 +22,14 @@
   "devDependencies": {
     "concurrently": "^3.5.0",
     "nodemon": "^1.11.0"
+  },
+  "now": {
+    "alias": "slacking-pigeons-server",
+    "env": [
+      "SLACK_CLIENT_ID",
+      "SLACK_CLIENT_SECRET",
+      "MONGO_URL",
+      "SLACK_VERIFICATION_TOKEN"
+    ]
   }
 }

@@ -84,7 +84,7 @@ export async function slackEventHandler(
           })
         }
       } else if (event.subtype === 'message_changed') {
-        console.log(event)
+        // console.log(event)
       } else if (!isOurBot(event.bot_id, team) && threadId) {
         // if we are in a thread and we haven't sent it
         let user = users[event.user]
@@ -111,7 +111,7 @@ export async function slackEventHandler(
         })
       }
     } else {
-      console.log(event)
+      // console.log(event)
     }
   }
 

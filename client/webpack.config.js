@@ -9,7 +9,6 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../server/dist/static')
   },
-  devtool: "source-map",
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".js", ".json"]
@@ -43,6 +42,7 @@ if (PRODUCTION) {
     })
   )
 } else {
+  config.devtool = "source-map",
   config.devServer = {
     contentBase: path.resolve(__dirname, '../server/dist/static'),
     hot: true,
