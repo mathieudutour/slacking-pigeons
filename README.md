@@ -26,6 +26,7 @@ TODO:
 - [ ] success page with installation instruction
 
 LATER:
+- [ ] method to interact with the widget (open, add message, etc.)
 - [ ] animate opening and new message
 - [ ] handle update message
 - [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team
