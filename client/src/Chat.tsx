@@ -1,7 +1,5 @@
 import * as React from 'react'
-import * as SocketIOClient from 'socket.io-client'
 import styled from 'styled-components'
-import { getSocketId } from './storage'
 import { Input } from './Input'
 import { Message } from './Message'
 import { ToggleButton } from './ToggleButton'

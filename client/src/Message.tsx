@@ -23,7 +23,7 @@ const Comment = styled.div`
   border-radius: 6px;
   position: relative;
   color: #fff;
-  background-color: #3ead3f;
+  background-color: ${process.env.COLOR!};
 `
 
 const Avatar = styled.div`

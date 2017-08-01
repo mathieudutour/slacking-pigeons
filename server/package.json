@@ -8,7 +8,7 @@
     "build": "cp index.html dist/static/index.html && cp deployed-package.json dist/package.json  && ../node_modules/.bin/tsc --p ./tsconfig.json",
     "start": "node index.js",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
-    "serve": "source ../.env && SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL nodemon dist/index.js"
+    "serve": "source ../.env && DEFAULT_TEAM_ID=$DEFAULT_TEAM_ID DEFAULT_COLOR=$DEFAULT_COLOR SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL nodemon dist/index.js"
   },
   "author": "",
   "license": "MIT",
@@ -29,7 +29,9 @@
       "SLACK_CLIENT_ID",
       "SLACK_CLIENT_SECRET",
       "MONGO_URL",
-      "SLACK_VERIFICATION_TOKEN"
+      "SLACK_VERIFICATION_TOKEN",
+      "DEFAULT_TEAM_ID",
+      "DEFAULT_COLOR"
     ]
   }
 }

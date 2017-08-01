@@ -6,7 +6,3 @@ export function parseQuery(q: string) {
     return prev
   }, result)
 }
-
-export function parseUrlForQuery(url: string) {
-  return parseQuery(url.split('?')[1])
-}

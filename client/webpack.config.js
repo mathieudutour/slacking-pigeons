@@ -4,22 +4,34 @@ const webpack = require('webpack')
 const PRODUCTION = process.argv.indexOf('-p') !== -1;
 
 const config = {
-  entry: "./index.tsx",
+  entry: "./src/index.tsx",
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../server/dist/static')
   },
   resolve: {
+    "alias": {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    },
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: [".ts", ".tsx", ".js", ".json"]
   },
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      { test: /\.tsx?$/, use: [
+          {
+            loader: 'awesome-typescript-loader',
+            options: {
+              useCache: true,
+            },
+          },
+        ]
+      },
 
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
     ]
   },
   plugins: [
@@ -27,21 +39,14 @@ const config = {
       'process.env': {
         'NODE_ENV': JSON.stringify(PRODUCTION ? 'production' : 'development'),
         'SERVER_HOST': JSON.stringify(process.env.SERVER_HOST || 'http://localhost:4000'),
-        'TEAM_ID': JSON.stringify(process.env.TEAM_ID || 'T6ETXT362')
+        'TEAM_ID': JSON.stringify(process.env.TEAM_ID || 'T6ETXT362'),
+        'COLOR': JSON.stringify(process.env.COLOR || '#3ead3f')
       }
     }),
   ]
 };
 
-if (PRODUCTION) {
-  config.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true
-      }
-    })
-  )
-} else {
+if (!PRODUCTION) {
   config.devtool = "source-map",
   config.devServer = {
     contentBase: path.resolve(__dirname, '../server/dist/static'),

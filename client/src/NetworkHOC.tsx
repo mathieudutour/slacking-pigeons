@@ -1,8 +1,6 @@
 import * as React from 'react'
 import * as SocketIOClient from 'socket.io-client'
 import { getSocketId } from './storage'
-import { Input } from './Input'
-import { Message } from './Message'
 
 export type TUser = {
   id: string
