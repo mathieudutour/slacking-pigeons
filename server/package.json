@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "../node_modules/.bin/tsc --p ./tsconfig.json && cp index.html dist/static/index.html",
-    "start": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL node dist/index.js",
+    "build": "cp index.html dist/static/index.html && ../node_modules/.bin/tsc --p ./tsconfig.json",
+    "start": "source ../.env && CLIENT_ID=$CLIENT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CLIENT_SECRET=$CLIENT_SECRET MONGO_URL=$MONGO_URL node dist/index.js",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
-    "serve": "source ../.env && OAUTH_TOKEN=$OAUTH_TOKEN VERIFICATION_TOKEN=$VERIFICATION_TOKEN CHANNEL=$CHANNEL MONGO_URL=$MONGO_URL nodemon dist/index.js"
+    "serve": "source ../.env && CLIENT_ID=$CLIENT_ID VERIFICATION_TOKEN=$VERIFICATION_TOKEN CLIENT_SECRET=$CLIENT_SECRET MONGO_URL=$MONGO_URL nodemon dist/index.js"
   },
   "author": "",
   "license": "ISC",

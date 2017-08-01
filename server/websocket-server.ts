@@ -1,9 +1,13 @@
-import {findSocket, findThread, IThread} from './monk'
-import {postNewMessage, answerInThread, User} from './slack'
+import { findSocket, findThread, IThread, findTeam, ITeam } from './monk'
+import { postNewMessage, answerInThread, User } from './slack'
 import * as SocketIO from 'socket.io'
 
 function getSocketId (socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).socketId
+}
+
+function getTeamId (socket: SocketIO.Socket): string | undefined {
+  return (socket.handshake.query || {}).teamId
 }
 
 export default function (io: SocketIO.Server) {
@@ -11,6 +15,7 @@ export default function (io: SocketIO.Server) {
     startServer () {
       io.on('connection', socket => {
         const socketId = getSocketId(socket)
+        const teamId = getTeamId(socket)
         console.log('a user connected ' + socketId)
 
         if (!socketId) {
@@ -18,7 +23,13 @@ export default function (io: SocketIO.Server) {
           return
         }
 
+        if (!teamId) {
+          console.log('no teamId, ignore')
+          return
+        }
+
         let thread: IThread
+        let team: ITeam
 
         socket.on('disconnect', () => {
           console.log('user disconnected')
@@ -26,16 +37,23 @@ export default function (io: SocketIO.Server) {
 
         socket.on('chat message', async (msg: string) => {
           if (!thread) {
-            const res = await findSocket(socketId)
+            const res = await findSocket(socketId, teamId)
             if (res) {
               thread = res
             }
           }
 
+          if (!team) {
+            const res = await findTeam(teamId)
+            if (res) {
+              team = res
+            }
+          }
+
           if (thread) {
-            answerInThread(msg, thread)
+            answerInThread(team, msg, thread)
           } else {
-            postNewMessage(msg, socketId)
+            postNewMessage(team, msg, socketId)
           }
 
           socket.emit('sent message', JSON.stringify({
@@ -45,8 +63,8 @@ export default function (io: SocketIO.Server) {
       })
     },
 
-    answerUser ({user, text, threadId, id}: {user: User, text: string, threadId: string, id: string}) {
-      return findThread(threadId).then(res => {
+    answerUser ({teamId, user, text, threadId, id}: {teamId: string, user: User, text: string, threadId: string, id: string}) {
+      return findThread(threadId, teamId).then(res => {
         if (res) {
           let socket = Object.keys(io.sockets.sockets).find(k => {
             return getSocketId(io.sockets.sockets[k]) === res.socketId
@@ -61,12 +79,12 @@ export default function (io: SocketIO.Server) {
       })
     },
 
-    acknowledgeReception({text, id, threadId, socketId}: {text: string, id: string, threadId: string, socketId?: string}) {
+    acknowledgeReception({teamId, text, id, threadId, socketId}: {teamId: string, text: string, id: string, threadId: string, socketId?: string}) {
       return Promise.resolve().then(() => {
         if (socketId) {
-          return {socketId, threadId: ''}
+          return {socketId, threadId: '', teamId}
         }
-        return findThread(threadId)
+        return findThread(threadId, teamId)
       }).then((res) => {
         if (res) {
           let socket = Object.keys(io.sockets.sockets).find(k => {

@@ -27,7 +27,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify(PRODUCTION ? 'production' : 'development'),
-        'SERVER_HOST': JSON.stringify(process.env.SERVER_HOST || 'http://localhost:4000')
+        'SERVER_HOST': JSON.stringify(process.env.SERVER_HOST || 'http://localhost:4000'),
+        'TEAM_ID': JSON.stringify(process.env.TEAM_ID || 'T6ETXT362')
       }
     }),
   ]

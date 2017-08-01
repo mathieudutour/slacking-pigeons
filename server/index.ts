@@ -7,12 +7,15 @@ import * as SocketIO from 'socket.io'
 import * as slack from './slack'
 import * as monk from './monk'
 import Websocket from './websocket-server'
+import cors from './cors'
 
-if (!process.env.OAUTH_TOKEN) {
-  console.error('missing slack token')
-  console.log(process.env.BOT_ID)
-  console.log(process.env.VERIFICATION_TOKEN)
-  console.log(process.env.OAUTH_TOKEN)
+if (!process.env.CLIENT_ID) {
+  console.error('missing slack client ID')
+  process.exit(1)
+}
+
+if (!process.env.CLIENT_SECRET) {
+  console.error('missing slack client secret')
   process.exit(1)
 }
 
@@ -26,19 +29,21 @@ const staticServing = (key: 'html' | 'js') => async (req: IncomingMessage, res: 
   res.end(assets[key])
 }
 
-const server = micro(router(
+const server = micro(cors(router(
   get('/', staticServing('html')),
   get('/bundle.js', staticServing('js')),
-  get('/history/:socket', slack.getThreadHistory),
+  get('/history/:team/:socket', slack.getThreadHistory),
+  get('/slack-oauth-callback', slack.addNewTeam),
   post('/slack-incoming', slack.slackEventHandler),
   post('/slack-action', slack.slackActionHandler)
-))
+)))
 
 const io = SocketIO(server)
 const websocket = Websocket(io)
 
-slack.on('newThread', (thread: {text: string, threadId: string, socketId: string, id: string}) => {
+slack.on('newThread', (thread: {teamId: string, text: string, threadId: string, socketId: string, id: string}) => {
   monk.createNewThread({
+    teamId: thread.teamId,
     threadId: thread.threadId,
     socketId: thread.socketId
   })
@@ -51,9 +56,9 @@ slack.on('receivedMessage', websocket.acknowledgeReception)
 // socket-io handlers
 websocket.startServer()
 
-server.listen(parseInt(process.env.PORT || '4000'))
-
-slack.greet()
+const port = parseInt(process.env.PORT || '4000')
+server.listen(port)
+console.log('Listening to ' + port)
 
 // Micro expects a function to be exported
 export default function () {

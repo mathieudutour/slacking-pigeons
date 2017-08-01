@@ -102,4 +102,4 @@ class Chat extends React.Component<Props, {open: boolean}> {
   }
 }
 
-export default NetworkHOC(Chat)
+export default NetworkHOC(process.env.TEAM_ID!)(Chat)

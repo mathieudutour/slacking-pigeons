@@ -22,7 +22,7 @@ export type TMessages = Array<TMessage>
 
 let tempId = 0
 
-export default (Chat: React.ComponentClass<{messages: TMessages, onSendMessage: (msg: string) => void}>) => class HookedChat extends React.Component<{}, {
+export default (teamId: string) => (Chat: React.ComponentClass<{messages: TMessages, onSendMessage: (msg: string) => void}>) => class HookedChat extends React.Component<{}, {
     messages: TMessages
   }> {
   _socket: SocketIOClient.Socket
@@ -36,13 +36,13 @@ export default (Chat: React.ComponentClass<{messages: TMessages, onSendMessage: 
 
     const socketId = getSocketId()
 
-    this._socket = SocketIOClient('http://localhost:4000' + '?socketId=' + socketId)
+    this._socket = SocketIOClient('http://localhost:4000' + '?socketId=' + socketId + '&teamId=' + teamId)
 
     this._socket.on('new message', this._onNewMessage)
     this._socket.on('sent message', this._onSentMessage)
     this._socket.on('received message', this._onReceivedMessage)
 
-    fetch('http://localhost:4000/history/' + socketId)
+    fetch('http://localhost:4000/history/' + teamId + '/' + socketId)
     .then(res => res.json())
     .then(messages => {
       this.setState({

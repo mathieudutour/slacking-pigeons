@@ -31,3 +31,4 @@ LATER:
 - [ ] tooltip with the name of the user
 - [ ] sent/received indicators
 - [ ] unread indicator
+- [ ] private request (to target another channel, possibly private message)
