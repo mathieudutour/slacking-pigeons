@@ -22,10 +22,13 @@ TODO:
 - [x] load history
 - [x] figure out how to find bot id
 - [x] figure our simple way to deploy
+- [ ] create slack team
+- [ ] create dev slack app
 - [ ] landing page
 - [ ] success page with installation instruction
 
 LATER:
+- [ ] private comment starting with //
 - [ ] method to interact with the widget (open, add message, etc.)
 - [ ] animate opening and new message
 - [ ] handle update message
