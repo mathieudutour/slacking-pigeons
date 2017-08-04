@@ -44,6 +44,7 @@ type Props = {
   text: string
   user: TUser
   group?: boolean
+  color?: string
 }
 
 export class Message extends React.Component<Props, { text: string }> {
@@ -83,7 +84,7 @@ export class Message extends React.Component<Props, { text: string }> {
       >
         {this.props.user.id === 'me'
           ? <OutgoingMessage>
-              <Comment>
+              <Comment style={{ backgroundColor: this.props.color }}>
                 {this.state.text}
               </Comment>
             </OutgoingMessage>

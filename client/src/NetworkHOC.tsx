@@ -18,40 +18,59 @@ export type TMessage = {
 }
 export type TMessages = Array<TMessage>
 
-let tempId = 0
+export type Props = {
+  label?: string
+  teamId?: string
+  color?: string
+}
 
-export const NetworkHOC = (teamId: string) => (
+let tempId = 0
+let artificialId = 0
+
+export const NetworkHOC = (
   Chat: React.ComponentClass<{
     messages: TMessages
     onSendMessage: (msg: string) => void
+    color?: string
+    showing?: boolean
   }>
 ) =>
   class HookedChat extends React.Component<
-    {},
+    Props,
     {
       messages: TMessages
+      showing: boolean
     }
   > {
     private _socket: SocketIOClient.Socket
 
-    public constructor() {
-      super()
+    public constructor(props: Props) {
+      super(props)
 
       this.state = {
         messages: [],
+        showing: false,
       }
 
       const socketId = getSocketId()
 
       this._socket = SocketIOClient(
-        process.env.SERVER_HOST + '?socketId=' + socketId + '&teamId=' + teamId
+        process.env.SERVER_HOST +
+          '?socketId=' +
+          socketId +
+          '&teamId=' +
+          props.teamId +
+          '&label=' +
+          props.label
       )
 
       this._socket.on('new message', this._onNewMessage)
       this._socket.on('sent message', this._onSentMessage)
       this._socket.on('received message', this._onReceivedMessage)
 
-      fetch(process.env.SERVER_HOST + '/history/' + teamId + '/' + socketId)
+      fetch(
+        process.env.SERVER_HOST + '/history/' + props.teamId + '/' + socketId
+      )
         .then(res => res.json())
         .then(messages => {
           this.setState({
@@ -65,6 +84,7 @@ export const NetworkHOC = (teamId: string) => (
                 }
               })
               .concat(this.state.messages),
+            showing: true,
           })
         })
     }
@@ -76,10 +96,32 @@ export const NetworkHOC = (teamId: string) => (
     public render() {
       return (
         <Chat
+          showing={this.state.showing}
           messages={this.state.messages}
           onSendMessage={this._onSendMessage}
+          color={this.props.color}
         />
       )
+    }
+
+    public addMessage = (text: string) => {
+      const message = {
+        text,
+        id: 'artificial' + artificialId++,
+        user: {
+          name: 'them',
+          id: 'them',
+          avatar: '',
+        },
+      }
+      this.setState({
+        messages: this.state.messages.concat({
+          ...message,
+          sent: true,
+          received: true,
+          read: false,
+        }),
+      })
     }
 
     private _onNewMessage = (msg: string) => {

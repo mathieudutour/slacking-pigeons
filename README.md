@@ -35,3 +35,4 @@ LATER:
 - [ ] sent/received indicators
 - [ ] unread indicator
 - [ ] private request (to target another channel, possibly private message)
+- [ ] hook up twitter, facebook

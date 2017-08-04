@@ -11,7 +11,7 @@
     "prettify": "find . -name \"*.tsx\" -o -name \"*.ts\" | grep -v -f .gitignore | xargs npm run prettier:base",
     "start": "cd server && npm run start",
     "build": "cd client && npm run build:prod && cd ../server && npm run build",
-    "deploy": "source .env.prod && SERVER_HOST=$SERVER_HOST TEAM_ID=$DEFAULT_TEAM_ID COLOR=$DEFAULT_COLOR npm run build && cd server/dist && now --public -e DEFAULT_COLOR=$DEFAULT_COLOR -e DEFAULT_TEAM_ID=$DEFAULT_TEAM_ID -e SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL && now alias"
+    "deploy": "source .env.prod && SERVER_HOST=$SERVER_HOST COLOR=$DEFAULT_COLOR npm run build && cd server/dist && now --public -e SLACK_CLIENT_ID=$SLACK_CLIENT_ID -e SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN -e SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET -e MONGO_URL=$MONGO_URL && now alias"
   },
   "author": "",
   "license": "MIT",

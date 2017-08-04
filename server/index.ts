@@ -24,30 +24,12 @@ const assets = {
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'), 'utf-8'),
 }
 
-const defaultTeamIdRegex = new RegExp(
-  process.env.DEFAULT_TEAM_ID || 'T6ETXT362',
-  'g'
-)
-const defaultColorRegex = new RegExp(
-  process.env.DEFAULT_COLOR || '#3ead3f',
-  'g'
-)
-
 const staticServing = (key: 'html' | 'js') => async (
-  req: IncomingMessage & { query: { [key: string]: string } },
+  req: IncomingMessage,
   res: ServerResponse
 ) => {
   console.log('Serving asset')
-  let asset = assets[key]
-  if (key === 'js') {
-    if (req.query.teamId) {
-      asset = asset.replace(defaultTeamIdRegex, req.query.teamId)
-    }
-    if (req.query.color) {
-      asset = asset.replace(defaultColorRegex, decodeURIComponent(req.query.color))
-    }
-  }
-  res.end(asset)
+  res.end(assets[key])
 }
 
 const server = micro(

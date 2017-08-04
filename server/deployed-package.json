@@ -21,9 +21,7 @@
       "SLACK_CLIENT_ID",
       "SLACK_CLIENT_SECRET",
       "MONGO_URL",
-      "SLACK_VERIFICATION_TOKEN",
-      "DEFAULT_TEAM_ID",
-      "DEFAULT_COLOR"
+      "SLACK_VERIFICATION_TOKEN"
     ]
   }
 }

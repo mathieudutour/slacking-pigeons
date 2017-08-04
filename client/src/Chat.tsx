@@ -8,6 +8,8 @@ import { NetworkHOC, TMessages, TMessage } from './NetworkHOC'
 type Props = {
   messages: TMessages
   onSendMessage: (msg: string) => void
+  color?: string
+  showing?: boolean
 }
 
 const Container = styled.div`
@@ -78,10 +80,17 @@ class Chat extends React.Component<Props, { open: boolean }> {
   }
 
   public render() {
+    if (!this.props.showing) {
+      return false
+    }
     let previousMessage: TMessage
     return (
       <div>
-        <ToggleButton open={this.state.open} onClick={this._toggleOpen} />
+        <ToggleButton
+          open={this.state.open}
+          onClick={this._toggleOpen}
+          color={this.props.color}
+        />
         {this.state.open &&
           <Container>
             <MessagesContainer innerRef={this._onRef}>
@@ -100,6 +109,7 @@ class Chat extends React.Component<Props, { open: boolean }> {
                       _previousMessage &&
                       message.user.id === _previousMessage.user.id
                     }
+                    color={this.props.color}
                   />
                 )
               })}
@@ -122,4 +132,4 @@ class Chat extends React.Component<Props, { open: boolean }> {
   }
 }
 
-export const HookedChat = NetworkHOC(process.env.TEAM_ID!)(Chat)
+export const HookedChat = NetworkHOC(Chat)

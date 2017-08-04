@@ -42,12 +42,15 @@ const Pigeon = styled.div`
 `
 
 export class ToggleButton extends React.Component<
-  { open: boolean; onClick: () => void },
+  { open: boolean; onClick: () => void; color?: string },
   {}
 > {
   public render() {
     return (
-      <Wrapper onClick={this.props.onClick}>
+      <Wrapper
+        onClick={this.props.onClick}
+        style={{ background: this.props.color }}
+      >
         <Cross open={this.props.open} />
         <Pigeon open={this.props.open}>
           <svg
