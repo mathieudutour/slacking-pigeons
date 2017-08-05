@@ -7,8 +7,11 @@ export function getSocketId() {
     return socketId
   }
 
-  // load from storage
-  if (localStorage[STORAGE_KEY]) {
+  if (location.search && location.search.indexOf(STORAGE_KEY) !== -1) {
+    // load from url
+    socketId = location.search.split(STORAGE_KEY + '=')[1].split('&')[0]
+  } else if (localStorage[STORAGE_KEY]) {
+    // load from localStorage
     socketId = localStorage[STORAGE_KEY]
   } else {
     // create a new ID
