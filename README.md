@@ -23,7 +23,7 @@ TODO:
 - [x] figure out how to find bot id
 - [x] figure our simple way to deploy
 - [ ] create slack team
-- [ ] create dev slack app
+- [x] create dev slack app
 - [ ] landing page
 - [ ] success page with installation instruction
 

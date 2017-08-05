@@ -15,7 +15,9 @@ export async function slackActionHandler(
     (parseQuery(await text(req)) as { payload: string }).payload
   ) as {
     token: string
-    team_id: string
+    team: {
+      id: string
+    }
     callback_id: string
     actions: Array<{
       name: string
@@ -43,7 +45,7 @@ export async function slackActionHandler(
     return
   }
 
-  const team = await findTeam(body.team_id)
+  const team = await findTeam(body.team.id)
 
   if (!team) {
     send(res, 200)

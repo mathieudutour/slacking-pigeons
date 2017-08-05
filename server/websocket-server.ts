@@ -86,7 +86,7 @@ export function Websocket(io: SocketIO.Server) {
       threadId: string
       id: string
     }) {
-      return findThread(threadId, teamId).then(res => {
+      return findThread(teamId, threadId).then(res => {
         if (res) {
           const socket = Object.keys(io.sockets.sockets).find(k => {
             return getSocketId(io.sockets.sockets[k]) === res.socketId
@@ -126,7 +126,7 @@ export function Websocket(io: SocketIO.Server) {
           if (socketId) {
             return { socketId, threadId: '', teamId, channel }
           }
-          return findThread(threadId, teamId)
+          return findThread(teamId, threadId)
         })
         .then(res => {
           if (res) {

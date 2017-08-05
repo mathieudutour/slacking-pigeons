@@ -65,8 +65,11 @@ export function createNewThread(thread: IThread): Promise<void> {
   return Threads.insert(thread)
 }
 
-export function removeThread(threadId: string, teamId: string): Promise<void> {
-  return Threads.remove({ threadId, teamId })
+export function removeThread(teamId: string, threadId: string): Promise<void> {
+  return Threads.remove({
+    threadId,
+    teamId,
+  })
 }
 
 export function findSocket(
@@ -80,8 +83,8 @@ export function findSocket(
 }
 
 export function findThread(
+  teamId: string,
   threadId: string,
-  teamId: string
 ): Promise<IThread | undefined> {
   return Threads.findOne({
     threadId,
