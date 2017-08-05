@@ -7,7 +7,7 @@ type Options = ChatOptions & {
   div?: Element
 }
 
-function renderHook(options: Options = {}) {
+function renderHook(options: Options) {
   if (!options.div) {
     options.div = document.createElement('div')
     document.body.insertBefore(options.div, document.body.firstChild)

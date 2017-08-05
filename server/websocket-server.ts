@@ -10,12 +10,17 @@ function getTeamId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).teamId
 }
 
+function getChannelId(socket: SocketIO.Socket): string | undefined {
+  return (socket.handshake.query || {}).channelId
+}
+
 export function Websocket(io: SocketIO.Server) {
   return {
     startServer() {
       io.on('connection', socket => {
         const socketId = getSocketId(socket)
         const teamId = getTeamId(socket)
+        let channelId = getChannelId(socket)
 
         if (!socketId) {
           console.log('no socketId, ignore')
@@ -52,7 +57,10 @@ export function Websocket(io: SocketIO.Server) {
           if (thread) {
             answerInThread(team, msg, thread)
           } else {
-            postNewMessage(team, msg, socketId)
+            if (!channelId) {
+              channelId = team.channels[0]
+            }
+            postNewMessage(team, msg, socketId, channelId)
           }
 
           socket.emit(
@@ -103,18 +111,20 @@ export function Websocket(io: SocketIO.Server) {
       text,
       id,
       threadId,
+      channel,
       socketId,
     }: {
       teamId: string
       text: string
       id: string
       threadId: string
+      channel: string
       socketId?: string
     }) {
       return Promise.resolve()
         .then(() => {
           if (socketId) {
-            return { socketId, threadId: '', teamId }
+            return { socketId, threadId: '', teamId, channel }
           }
           return findThread(threadId, teamId)
         })

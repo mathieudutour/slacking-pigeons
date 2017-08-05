@@ -19,8 +19,9 @@ export type TMessage = {
 export type TMessages = Array<TMessage>
 
 export type Props = {
+  channelId?: string
   label?: string
-  teamId?: string
+  teamId: string
   color?: string
 }
 
@@ -52,6 +53,10 @@ export const NetworkHOC = (
         showing: false,
       }
 
+      if (!props.teamId) {
+        throw new Error('[Slacking-pigeons] Missing team id')
+      }
+
       const socketId = getSocketId()
 
       this._socket = SocketIOClient(
@@ -61,7 +66,8 @@ export const NetworkHOC = (
           '&teamId=' +
           props.teamId +
           '&label=' +
-          props.label
+          (props.label || 'default') +
+          '&channel=' + props.channelId
       )
 
       this._socket.on('new message', this._onNewMessage)

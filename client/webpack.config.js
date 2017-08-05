@@ -46,9 +46,8 @@ const config = {
 };
 
 if (!PRODUCTION) {
-  config.devtool = "source-map",
+  config.devtool = 'inline-source-map'
   config.devServer = {
-    contentBase: path.resolve(__dirname, '../server/dist/static'),
     hot: true,
     inline: true,
     host: "0.0.0.0",
@@ -56,7 +55,7 @@ if (!PRODUCTION) {
   }
   config.plugins.push(
     new webpack.HotModuleReplacementPlugin()
-  );
+  )
 }
 
 module.exports = config

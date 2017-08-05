@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { ITeam, IThread } from '../monk'
 
-export function postNewMessage(team: ITeam, message: string, socketId: string) {
+export function postNewMessage(team: ITeam, message: string, socketId: string, channelId: string) {
   return axios({
     method: 'post',
     url: `https://slack.com/api/chat.postMessage?token=${team.token}&attachments=${encodeURIComponent(
@@ -37,13 +37,13 @@ export function postNewMessage(team: ITeam, message: string, socketId: string) {
           ],
         },
       ])
-    )}&channel=${team.channel}`,
+    )}&channel=${channelId}`,
   })
 }
 
 export function answerInThread(team: ITeam, message: string, thread: IThread) {
   return axios({
     method: 'post',
-    url: `https://slack.com/api/chat.postMessage?token=${team.token}&text=${message}&thread_ts=${thread.threadId}&channel=${team.channel}`,
+    url: `https://slack.com/api/chat.postMessage?token=${team.token}&text=${message}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
   })
 }

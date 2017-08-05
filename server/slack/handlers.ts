@@ -11,6 +11,7 @@ type NEW_THREAD_HANDLER_TYPE = (
     id: string
     socketId: string
     threadId: string
+    channel: string
   }
 ) => void
 type NEW_MESSAGE_HANDLER_TYPE = (
@@ -24,7 +25,7 @@ type NEW_MESSAGE_HANDLER_TYPE = (
 ) => void
 type REMOVE_THREAD_HANDLER_TYPE = (teamId: string, threadId: string) => void
 type RECEIVED_MESSAGE_HANDLER_TYPE = (
-  message: { teamId: string; text: string; id: string; threadId: string }
+  message: { teamId: string; text: string; id: string; threadId: string, channel: string }
 ) => void
 
 export type User = {

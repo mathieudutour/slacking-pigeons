@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { send } from 'micro'
 import { IncomingMessage, ServerResponse } from 'http'
 import { getSlackUser, users } from './users'
 
@@ -12,7 +13,7 @@ export async function getThreadHistory(
   const team = await findTeam(teamId)
 
   if (!team) {
-    res.end('[]')
+    send(res, 404, 'Didn\'t find the team')
     return
   }
 
@@ -26,10 +27,10 @@ export async function getThreadHistory(
 
   const replies = await axios({
     method: 'post',
-    url: `https://slack.com/api/channels.replies?token=${team.token}&thread_ts=${thread.threadId}&channel=${team.channel}`,
+    url: `https://slack.com/api/channels.replies?token=${team.token}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
   })
 
-  const messages = replies.data.messages
+  const messages = replies.data.messages || []
 
   const bot_id = messages[0].bot_id
 

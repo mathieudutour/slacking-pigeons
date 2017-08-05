@@ -55,12 +55,14 @@ slack.on(
     text: string
     threadId: string
     socketId: string
+    channel: string
     id: string
   }) => {
     monk.createNewThread({
       teamId: thread.teamId,
       threadId: thread.threadId,
       socketId: thread.socketId,
+      channel: thread.channel
     })
     websocket.acknowledgeReception(thread)
   }

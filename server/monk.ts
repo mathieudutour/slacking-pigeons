@@ -8,20 +8,28 @@ const Threads = monk.get('threads')
 Threads.createIndex('teamId threadId')
 Threads.createIndex('teamId socketId')
 
-export interface ITeam {
+export interface IChannel {
   readonly teamId: string
   readonly token: string
   readonly bot_id?: string
   readonly channel: string
 }
 
+export interface ITeam {
+  readonly teamId: string
+  readonly token: string
+  readonly bot_id?: string
+  readonly channels: string[]
+}
+
 export interface IThread {
   readonly teamId: string
   readonly threadId: string
   readonly socketId: string
+  readonly channel: string
 }
 
-export function createOrUpdateNewTeam(team: ITeam): Promise<void> {
+export function createOrUpdateNewTeam(team: IChannel): Promise<void> {
   return findTeam(team.teamId).then(res => {
     if (res) {
       return Teams.update(
@@ -29,12 +37,19 @@ export function createOrUpdateNewTeam(team: ITeam): Promise<void> {
         {
           $set: {
             token: team.token,
-            channel: team.channel,
           },
+          $addToSet: {
+            channels: team.channel,
+          }
         }
       )
     }
-    return Teams.insert(team)
+    const objectToInsert = {
+      teamId: team.teamId,
+      token: team.token,
+      channels: [team.channel]
+    }
+    return Teams.insert(objectToInsert)
   })
 }
 
