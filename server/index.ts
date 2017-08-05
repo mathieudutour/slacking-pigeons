@@ -62,7 +62,7 @@ slack.on(
       teamId: thread.teamId,
       threadId: thread.threadId,
       socketId: thread.socketId,
-      channel: thread.channel
+      channel: thread.channel,
     })
     websocket.acknowledgeReception(thread)
   }

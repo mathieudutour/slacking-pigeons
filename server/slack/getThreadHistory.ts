@@ -13,7 +13,7 @@ export async function getThreadHistory(
   const team = await findTeam(teamId)
 
   if (!team) {
-    send(res, 404, 'Didn\'t find the team')
+    send(res, 404, "Didn't find the team")
     return
   }
 

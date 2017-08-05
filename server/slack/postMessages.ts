@@ -2,7 +2,12 @@ import axios from 'axios'
 
 import { ITeam, IThread } from '../monk'
 
-export function postNewMessage(team: ITeam, message: string, socketId: string, channelId: string) {
+export function postNewMessage(
+  team: ITeam,
+  message: string,
+  socketId: string,
+  channelId: string
+) {
   return axios({
     method: 'post',
     url: `https://slack.com/api/chat.postMessage?token=${team.token}&attachments=${encodeURIComponent(

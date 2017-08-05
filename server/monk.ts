@@ -40,14 +40,14 @@ export function createOrUpdateNewTeam(team: IChannel): Promise<void> {
           },
           $addToSet: {
             channels: team.channel,
-          }
+          },
         }
       )
     }
     const objectToInsert = {
       teamId: team.teamId,
       token: team.token,
-      channels: [team.channel]
+      channels: [team.channel],
     }
     return Teams.insert(objectToInsert)
   })
@@ -84,7 +84,7 @@ export function findSocket(
 
 export function findThread(
   teamId: string,
-  threadId: string,
+  threadId: string
 ): Promise<IThread | undefined> {
   return Threads.findOne({
     threadId,

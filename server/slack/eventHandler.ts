@@ -80,7 +80,7 @@ export async function slackEventHandler(
               id: event.ts,
               socketId,
               threadId: event.ts,
-              channel: event.channel
+              channel: event.channel,
             })
           })
         }
@@ -108,7 +108,7 @@ export async function slackEventHandler(
             text: event.text,
             id: event.ts,
             threadId,
-            channel: event.channel
+            channel: event.channel,
           })
         })
       }

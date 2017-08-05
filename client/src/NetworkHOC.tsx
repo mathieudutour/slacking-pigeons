@@ -67,7 +67,8 @@ export const NetworkHOC = (
           props.teamId +
           '&label=' +
           (props.label || 'default') +
-          '&channel=' + props.channelId
+          '&channel=' +
+          props.channelId
       )
 
       this._socket.on('new message', this._onNewMessage)
