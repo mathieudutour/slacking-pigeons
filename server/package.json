@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && mkdir -p dist/static && cp -r views dist/views && cp deployed-package.json dist/package.json && touch dist/static/bundle.js && ../node_modules/.bin/tsc --p ./tsconfig.json",
+    "build": "rm -rf dist && mkdir -p dist && cp -r views dist/views && cp -r .elasticbeanstalk dist/.elasticbeanstalk && cp deployed-package.json dist/package.json && cp -r static dist/static && ../node_modules/.bin/tsc --p ./tsconfig.json",
     "start": "node index.js",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
     "serve": "source ../.env && SLACK_CLIENT_ID=$SLACK_CLIENT_ID SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET  MONGO_URL=$MONGO_URL nodemon dist/index.js"

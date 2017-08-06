@@ -23,7 +23,7 @@ if (!process.env.SLACK_CLIENT_SECRET) {
 const assets = {
   html: fs.readFileSync(path.join(__dirname, './views/index.html'), 'utf-8'),
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'), 'utf-8'),
-  css: fs.readFileSync(path.join(__dirname, './views/style.css'), 'utf-8'),
+  css: fs.readFileSync(path.join(__dirname, './static/style.css'), 'utf-8'),
 }
 
 const staticServing = (key: 'html' | 'js' | 'css') => async (

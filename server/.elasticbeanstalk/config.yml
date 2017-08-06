@@ -1,0 +1,18 @@
+branch-defaults:
+  default:
+    environment: slacking-pigeons-prod
+    group_suffix: null
+global:
+  application_name: slacking-pigeons
+  branch: null
+  default_ec2_keyname: null
+  default_platform: Node.js
+  default_region: eu-west-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  repository: null
+  sc: null
+  workspace_type: Application
