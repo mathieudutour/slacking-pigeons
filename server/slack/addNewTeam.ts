@@ -12,7 +12,7 @@ import { serveHTML } from '../serve-html'
 const assets = {
   addToSlack: fs.readFileSync(path.join(__dirname, '../views/add-to-slack.html'), 'utf-8'),
   loggedIn: fs.readFileSync(path.join(__dirname, '../views/logged-in.html'), 'utf-8'),
-  upsell: fs.readFileSync(path.join(__dirname, '../views/logged-in.html'), 'utf-8'),
+  upsell: fs.readFileSync(path.join(__dirname, '../views/upsell.html'), 'utf-8'),
 }
 
 export async function addNewTeam(
