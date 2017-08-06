@@ -22,20 +22,21 @@ TODO:
 - [x] load history
 - [x] figure out how to find bot id
 - [x] figure our simple way to deploy
-- [ ] create slack team
+- [x] create slack team
 - [x] create dev slack app
-- [ ] landing page
-- [ ] success page with installation instruction
+- [x] landing page
+- [x] success page with installation instruction
+- [ ] stripe integration
 
 LATER:
 - [ ] private comment starting with //
 - [ ] method to interact with the widget (open, add message, etc.)
 - [ ] animate opening and new message
 - [ ] handle update message
-- [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team
-- [ ] enter email to receive replies if leaving
+- [ ] hook with https://github.com/rauchg/slackin to have a page to join the slack team (optionally)
+- [ ] enter email to receive replies if leaving (optionally)
 - [ ] tooltip with the name of the user
 - [ ] sent/received indicators
 - [ ] unread indicator
-- [ ] private request (to target another channel, possibly private message)
+- [ ] private request (to target another channel, possibly private message) (optionally)
 - [ ] hook up twitter, facebook
