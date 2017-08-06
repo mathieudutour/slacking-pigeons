@@ -24,6 +24,7 @@ const Comment = styled.div`
   position: relative;
   color: #fff;
   background-color: ${process.env.COLOR!};
+  font-size: 15px;
 `
 
 const Avatar = styled.div`

@@ -20,6 +20,7 @@ export interface ITeam {
   readonly token: string
   readonly bot_id?: string
   readonly channels: string[]
+  readonly premium?: boolean
 }
 
 export interface IThread {

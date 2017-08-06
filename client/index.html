@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Slacking Pigeons Example</title>
+  <meta name="slack-app-id" content="A6KCPQ81L">
 </head>
 <body>
 	<style>
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body { font: 13px Helvetica, Arial; }
   </style>
-  <div id="app"></div>
+  <a href="https://slack.com/oauth/authorize?&client_id=218949921206.223431824054&scope=incoming-webhook,channels:history,chat:write:bot,users:read"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+  <a href="https://slack.com/oauth/authorize?scope=identity.basic&client_id=218949921206.223431824054"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
   <script>
     window.onSlackingPigeonsReady= function (render) {
       render({

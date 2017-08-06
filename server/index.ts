@@ -8,6 +8,7 @@ import * as slack from './slack'
 import * as monk from './monk'
 import { Websocket } from './websocket-server'
 import { cors } from './cors'
+import { serveHTML } from './serve-html'
 
 if (!process.env.SLACK_CLIENT_ID) {
   console.error('missing slack client ID')
@@ -20,16 +21,23 @@ if (!process.env.SLACK_CLIENT_SECRET) {
 }
 
 const assets = {
-  html: fs.readFileSync(path.join(__dirname, './static/index.html'), 'utf-8'),
+  html: fs.readFileSync(path.join(__dirname, './views/index.html'), 'utf-8'),
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'), 'utf-8'),
+  css: fs.readFileSync(path.join(__dirname, './views/style.css'), 'utf-8'),
 }
 
-const staticServing = (key: 'html' | 'js') => async (
+const staticServing = (key: 'html' | 'js' | 'css') => async (
   req: IncomingMessage,
   res: ServerResponse
 ) => {
   console.log('Serving asset')
-  res.end(assets[key])
+  if (key === 'html') {
+    res.end(serveHTML(assets[key], {
+      SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID!
+    }))
+  } else {
+    res.end(assets[key])
+  }
 }
 
 const server = micro(
@@ -37,6 +45,7 @@ const server = micro(
     router(
       get('/', staticServing('html')),
       get('/bundle.js', staticServing('js')),
+      get('/style.css', staticServing('css')),
       get('/history/:team/:socket', slack.getThreadHistory),
       get('/slack-oauth-callback', slack.addNewTeam),
       post('/slack-incoming', slack.slackEventHandler),

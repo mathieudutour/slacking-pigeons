@@ -1,0 +1,196 @@
+body, html {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size: 14px;
+	line-height: 1.5;
+	color: #24292e;
+}
+
+img {
+	border-style: none;
+}
+
+header {
+	padding: 60px 16px 40px;
+}
+
+.container {
+	max-width: 980px;
+	margin: 0 auto;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.nav {
+	position: absolute;
+  right: 15px;
+  top: 15px
+}
+
+.hero {
+	padding: 40px 16px 0;
+}
+
+.hero h1 {
+	font-size: 40px;
+	font-weight: 300;
+	margin: 0;
+}
+
+.hero p {
+	font-size: 18px;
+	font-weight: 300;
+	margin: 0 0 24px;
+	opacity: 0.75;
+}
+
+.cta {
+	padding: .9em 1.25em;
+	color: rgba(36, 41, 46, 0.75);
+	background: transparent;
+	border: 1px solid rgba(36, 41, 46, 0.75);
+	border-radius: .3em;
+	position: relative;
+	display: inline-block;
+	text-decoration: none;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 20px;
+	white-space: nowrap;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.cta:hover {
+	background: rgba(36, 41, 46, 0.75);
+	color: white;
+}
+
+.cta.primary {
+	color: #3EAD3F;
+	border-color: rgba(62, 173, 63, 0.5);
+}
+
+.cta.primary:hover {
+	background: #3EAD3F;
+	color: white;
+}
+
+.screenshot {
+	max-width: 100%;
+	margin-top: 40px;
+}
+
+.screenshot img {
+	max-width: 1072px;
+	width: 100%;
+}
+
+h2 {
+	font-size: 32px;
+	font-weight: 300;
+	margin-top: 0;
+	margin-bottom: 16px;
+}
+
+.features {
+	display: flex;
+	font-size: 16px;
+  flex-wrap: wrap;
+}
+
+.features h2 {
+	font-size: 24px;
+	font-weight: 300;
+	margin: 8px 0;
+}
+
+.features p {
+	opacity: 0.75;
+	margin-top: 0;
+}
+
+.features div {
+  flex: 1;
+	padding: 16px 24px;
+  min-width: 230px;
+}
+
+hr {
+	margin: 80px auto;
+	border-color: rgba(0, 0, 0, 0.1);
+	width: 100px;
+}
+
+footer {
+	text-align: center;
+	opacity: 0.5;
+	padding-bottom: 40px;
+}
+
+footer svg {
+  position: relative;
+  top: 5px;
+}
+
+footer a {
+  text-decoration: none;
+  color: #24292e;
+}
+
+pre {
+  text-align: left;
+  background: #83847f;
+  color: #FFF;
+  padding: 15px;
+  width: 100%;
+  overflow-x: auto;
+  box-sizing: border-box;
+}
+
+a {
+  color: #3EAD3F;
+}
+
+.plan {
+  border: 1px solid #e1e4e8;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(27, 31, 35, 0.1);
+  margin: 0 10px 30px;
+  min-width: 250px;
+}
+
+.plan h3 {
+  margin-bottom: 2px;
+}
+
+.plan h4 {
+  font-size: 14px;
+  opacity: 0.8;
+  font-weight: normal;
+  margin-top: 0;
+}
+
+.plan ul {
+  padding: 0;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.plan li {
+  margin-bottom: 10px;
+}
+
+.question h3 {
+  font-size: 20px;
+  font-weight: 300;
+  margin-top: 50px;
+}
+
+.question a {
+  color: #24292e;
+}
+
