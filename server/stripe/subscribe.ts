@@ -17,6 +17,8 @@ export async function subscribeToPremium (req: IncomingMessage, res: ServerRespo
 
   const team = await findTeam(body.teamId)
 
+  res.setHeader('Content-Type', 'text/html')
+
   if (!team) {
     send(res, 404, addToSlack())
     return

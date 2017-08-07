@@ -37,6 +37,8 @@ export async function addNewTeam(
     return
   }
 
+  res.setHeader('Content-Type', 'text/html')
+
   if (!body.incoming_webhook) {
     // sign in with Slack
     const team = await findTeam(body.team.id)

@@ -32,6 +32,7 @@ const staticServing = (key: 'html' | 'js' | 'css') => async (
   res: ServerResponse
 ) => {
   if (key === 'html') {
+    res.setHeader('Content-Type', 'text/html')
     res.end(index())
   } else {
     res.end(assets[key])
