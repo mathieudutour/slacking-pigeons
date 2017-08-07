@@ -3,7 +3,7 @@ import { IncomingMessage, ServerResponse } from 'http'
 import { text, send } from 'micro'
 import { VERIFICATION_TOKEN } from './constants'
 import { handlers } from './handlers'
-import { parseQuery } from './_parseQuery'
+import { parseQuery } from '../_parseQuery'
 
 import { findTeam } from '../monk'
 

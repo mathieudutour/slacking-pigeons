@@ -8,7 +8,7 @@
     "build": "rm -rf dist && mkdir -p dist && cp -r views dist/views && cp -r .elasticbeanstalk dist/.elasticbeanstalk && cp deployed-package.json dist/package.json && cp -r static dist/static && ../node_modules/.bin/tsc --p ./tsconfig.json",
     "start": "node index.js",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
-    "serve": "source ../.env && SLACK_CLIENT_ID=$SLACK_CLIENT_ID SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET  MONGO_URL=$MONGO_URL nodemon dist/index.js"
+    "serve": "source ../.env && STRIPE_SECRET=$STRIPE_SECRET STRIPE_CLIENT=$STRIPE_CLIENT STRIPE_ENDPOINT_SECRET=$STRIPE_ENDPOINT_SECRET SLACK_CLIENT_ID=$SLACK_CLIENT_ID SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET  MONGO_URL=$MONGO_URL nodemon dist/index.js"
   },
   "author": "",
   "license": "MIT",
@@ -17,19 +17,11 @@
     "micro": "^7.3.3",
     "microrouter": "^2.2.1",
     "monk": "^6.0.3",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "stripe": "^4.23.2"
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
     "nodemon": "^1.11.0"
-  },
-  "now": {
-    "alias": "slacking-pigeons-server",
-    "env": [
-      "SLACK_CLIENT_ID",
-      "SLACK_CLIENT_SECRET",
-      "MONGO_URL",
-      "SLACK_VERIFICATION_TOKEN"
-    ]
   }
 }

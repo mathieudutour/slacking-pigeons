@@ -5,10 +5,11 @@ import micro from 'micro'
 import { router, get, post } from 'microrouter'
 import * as SocketIO from 'socket.io'
 import * as slack from './slack'
+import * as stripe from './stripe'
 import * as monk from './monk'
 import { Websocket } from './websocket-server'
 import { cors } from './cors'
-import { serveHTML } from './serve-html'
+import { index } from './views'
 
 if (!process.env.SLACK_CLIENT_ID) {
   console.error('missing slack client ID')
@@ -21,7 +22,7 @@ if (!process.env.SLACK_CLIENT_SECRET) {
 }
 
 const assets = {
-  html: fs.readFileSync(path.join(__dirname, './views/index.html'), 'utf-8'),
+  html: index(),
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'), 'utf-8'),
   css: fs.readFileSync(path.join(__dirname, './static/style.css'), 'utf-8'),
 }
@@ -30,11 +31,8 @@ const staticServing = (key: 'html' | 'js' | 'css') => async (
   req: IncomingMessage,
   res: ServerResponse
 ) => {
-  console.log('Serving asset')
   if (key === 'html') {
-    res.end(serveHTML(assets[key], {
-      SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID!
-    }))
+    res.end(index())
   } else {
     res.end(assets[key])
   }
@@ -49,7 +47,9 @@ const server = micro(
       get('/history/:team/:socket', slack.getThreadHistory),
       get('/slack-oauth-callback', slack.addNewTeam),
       post('/slack-incoming', slack.slackEventHandler),
-      post('/slack-action', slack.slackActionHandler)
+      post('/slack-action', slack.slackActionHandler),
+      post('/stripe-webhook', stripe.handler),
+      post('/subscribe', stripe.subscribeToPremium)
     )
   )
 )

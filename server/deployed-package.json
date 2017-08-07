@@ -13,15 +13,7 @@
     "micro": "^7.3.3",
     "microrouter": "^2.2.1",
     "monk": "^6.0.3",
-    "socket.io": "^2.0.3"
-  },
-  "now": {
-    "alias": "slacking-pigeons",
-    "env": [
-      "SLACK_CLIENT_ID",
-      "SLACK_CLIENT_SECRET",
-      "MONGO_URL",
-      "SLACK_VERIFICATION_TOKEN"
-    ]
+    "socket.io": "^2.0.3",
+    "stripe": "^4.23.2"
   }
 }

@@ -3,7 +3,7 @@ import { send } from 'micro'
 import { IncomingMessage, ServerResponse } from 'http'
 import { getSlackUser, users } from './users'
 
-import { findSocket, findTeam, addBotIdToTeam } from '../monk'
+import { findSocket, findTeam, updateTeam, countThreadsSeenAfter } from '../monk'
 
 export async function getThreadHistory(
   req: IncomingMessage & { params: { [key: string]: string } },
@@ -15,6 +15,19 @@ export async function getThreadHistory(
   if (!team) {
     send(res, 404, "Didn't find the team")
     return
+  }
+
+  if (!team.premium) {
+    const seenAfter = new Date()
+    seenAfter.setDate(0)
+    seenAfter.setHours(0, 0, 0, 0)
+    const count = await countThreadsSeenAfter(team.teamId, seenAfter.getTime())
+
+    if (count > 25) {
+      send(res, 403, "quota limit")
+
+      return
+    }
   }
 
   const socketId = req.params.socket
@@ -35,7 +48,9 @@ export async function getThreadHistory(
   const bot_id = messages[0].bot_id
 
   if (!team.bot_id) {
-    await addBotIdToTeam(teamId, messages[0].bot_id)
+    await updateTeam(teamId, {
+      bot_id: messages[0].bot_id
+    })
   }
 
   const me = {

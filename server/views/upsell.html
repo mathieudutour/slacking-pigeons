@@ -19,6 +19,7 @@
   </g>
 </svg></a>
 </header>
+<div class="error">{{{ERROR}}}</div>
 <div class="container text-center hero">
 	<h1>You are all set!</h1>
 	<p>In order to add the slacking pigeons button on your website, add the following piece of code to your webpage.</p>
@@ -60,9 +61,21 @@
         <li>Unlimited Operators</li>
         <li><strong>1000 conversations/month</strong></li>
       </ul>
+      <form action="/subscribe" method="POST">
+        <input type="hidden" value="{{{TEAM_ID}}}" name="teamId" id="teamId" />
+        <script
+          src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+          data-key="{{{STRIPE_CLIENT}}}"
+          data-amount="2999"
+          data-name="Slacking Pigeons"
+          data-description="1000 conversations/month"
+          data-image="https://s3-us-west-2.amazonaws.com/slack-files2/avatars/2017-08-05/222892334389_a447711fa80eb07e960f_96.png"
+          data-locale="auto"
+          data-currency="usd">
+        </script>
+      </form>
 		</div>
 	</div>
-<!-- Add stripe here  -->
 </div>
 
 <hr />

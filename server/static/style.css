@@ -81,7 +81,8 @@ header {
 
 .screenshot {
 	max-width: 100%;
-	margin-top: 40px;
+  margin: 40px 0;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .06), 0 2px 32px rgba(0, 0, 0, .16);
 }
 
 .screenshot img {
@@ -194,5 +195,21 @@ a {
 
 .question a {
   color: #24292e;
+}
+
+.error {
+  background: #FF6A88;
+  color: white;
+  margin: 40px auto;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+  padding: 20px;
+  font-size: 20px;
+}
+
+.error:empty {
+  display: none;
 }
 

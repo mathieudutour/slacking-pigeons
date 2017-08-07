@@ -6,7 +6,7 @@ import { GREET_MESSAGE } from './greet'
 import { handlers } from './handlers'
 import { users, getSlackUser } from './users'
 
-import { findTeam, addBotIdToTeam, ITeam } from '../monk'
+import { findTeam, updateTeam, ITeam } from '../monk'
 
 function isOurBot(bot: string | undefined, team: ITeam) {
   return bot && team.bot_id === bot
@@ -67,7 +67,7 @@ export async function slackEventHandler(
 
       // if we greet and haven't a BOT_ID yet, it's most probably us
       if (event.text === GREET_MESSAGE && event.bot_id && !team.bot_id) {
-        await addBotIdToTeam(team.teamId, event.bot_id)
+        await updateTeam(team.teamId, {bot_id: event.bot_id})
       } else if (!threadId || event.thread_ts === event.ts) {
         // if top level message
         // if we sent the top message, then we need to associate the message id with the user

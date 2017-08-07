@@ -21,6 +21,8 @@ export interface ITeam {
   readonly bot_id?: string
   readonly channels: string[]
   readonly premium?: boolean
+  readonly stripeId?: string
+  readonly email?: string
 }
 
 export interface IThread {
@@ -28,6 +30,7 @@ export interface IThread {
   readonly threadId: string
   readonly socketId: string
   readonly channel: string
+  lastSeen?: number
 }
 
 export function createOrUpdateNewTeam(team: IChannel): Promise<void> {
@@ -58,11 +61,12 @@ export function findTeam(teamId: string): Promise<ITeam | undefined> {
   return Teams.findOne({ teamId })
 }
 
-export function addBotIdToTeam(teamId: string, bot_id: string): Promise<void> {
-  return Teams.update({ teamId }, { $set: { bot_id } })
+export function updateTeam(teamId: string, update: {[key: string]: any}): Promise<void> {
+  return Teams.update({ teamId }, { $set: update })
 }
 
 export function createNewThread(thread: IThread): Promise<void> {
+  thread.lastSeen = Date.now()
   return Threads.insert(thread)
 }
 
@@ -77,6 +81,10 @@ export function findSocket(
   socketId: string,
   teamId: string
 ): Promise<IThread | undefined> {
+  Threads.update({
+    socketId,
+    teamId
+  }, {$set: {lastSeen: Date.now()}})
   return Threads.findOne({
     socketId,
     teamId,
@@ -87,8 +95,19 @@ export function findThread(
   teamId: string,
   threadId: string
 ): Promise<IThread | undefined> {
+  Threads.update({
+    threadId,
+    teamId
+  }, {$set: {lastSeen: Date.now()}})
   return Threads.findOne({
     threadId,
     teamId,
+  })
+}
+
+export function countThreadsSeenAfter(teamId: string, seenAfter: number) {
+  return Threads.count({
+    teamId,
+    seenAt: {$gte: seenAfter},
   })
 }
