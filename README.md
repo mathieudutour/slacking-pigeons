@@ -15,20 +15,7 @@ npm i -g ngrok
 ngrok http 4000
 ```
 
-TODO:
-- [x] copy at the top
-- [x] scroll to bottom when adding a message
-- [x] emoji
-- [x] load history
-- [x] figure out how to find bot id
-- [x] figure our simple way to deploy
-- [x] create slack team
-- [x] create dev slack app
-- [x] landing page
-- [x] success page with installation instruction
-- [ ] stripe integration
-
-LATER:
+COMING SOON FEATURES (in no particular order):
 - [ ] private comment starting with //
 - [ ] method to interact with the widget (open, add message, etc.)
 - [ ] animate opening and new message
