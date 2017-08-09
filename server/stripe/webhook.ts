@@ -5,17 +5,28 @@ import { findTeam, updateTeam } from '../monk'
 
 const stripe: StripeNode.Stripe & {
   webhooks?: {
-    constructEvent: (body: string, sig: string | string[], secret: string) => any
+    constructEvent: (
+      body: string,
+      sig: string | string[],
+      secret: string
+    ) => any
   }
 } = Stripe(process.env.STRIPE_SECRET!)
 
-export async function handler (req: IncomingMessage, res: ServerResponse) {
+export async function handler(req: IncomingMessage, res: ServerResponse) {
   const sig = req.headers['stripe-signature']
   const body = await text(req)
-  const stripeEvent = stripe.webhooks!.constructEvent(body, sig, process.env.STRIPE_ENDPOINT_SECRET!)
+  const stripeEvent = stripe.webhooks!.constructEvent(
+    body,
+    sig,
+    process.env.STRIPE_ENDPOINT_SECRET!
+  )
 
   const subscription = stripeEvent.data.object
-  if (subscription.object === 'subscription' && subscription.status !== 'active') {
+  if (
+    subscription.object === 'subscription' &&
+    subscription.status !== 'active'
+  ) {
     const customer = await stripe.customers.retrieve(subscription.customer)
 
     if (!customer) {
@@ -23,7 +34,9 @@ export async function handler (req: IncomingMessage, res: ServerResponse) {
       return
     }
 
-    const team = await findTeam((customer.metadata as {teamId: string}).teamId)
+    const team = await findTeam(
+      (customer.metadata as { teamId: string }).teamId
+    )
 
     if (!team) {
       send(res, 204, 'nothing to do')
@@ -31,11 +44,10 @@ export async function handler (req: IncomingMessage, res: ServerResponse) {
     }
 
     await updateTeam(team.teamId, {
-      premium: false
+      premium: false,
     })
 
     send(res, 202, 'done')
-
   } else {
     send(res, 204, 'nothing to do')
   }

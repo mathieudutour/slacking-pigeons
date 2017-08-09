@@ -23,6 +23,7 @@ export type Props = {
   label?: string
   teamId: string
   color?: string
+  intro?: string
 }
 
 let tempId = 0
@@ -34,6 +35,7 @@ export const NetworkHOC = (
     onSendMessage: (msg: string) => void
     color?: string
     showing?: boolean
+    intro?: string
   }>
 ) =>
   class HookedChat extends React.Component<
@@ -107,6 +109,7 @@ export const NetworkHOC = (
           messages={this.state.messages}
           onSendMessage={this._onSendMessage}
           color={this.props.color}
+          intro={this.props.intro}
         />
       )
     }

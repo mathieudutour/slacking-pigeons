@@ -10,6 +10,7 @@ type Props = {
   onSendMessage: (msg: string) => void
   color?: string
   showing?: boolean
+  intro?: string
 }
 
 const Container = styled.div`
@@ -94,10 +95,13 @@ class Chat extends React.Component<Props, { open: boolean }> {
         {this.state.open &&
           <Container>
             <MessagesContainer innerRef={this._onRef}>
-              <IntroCopy>
-                Hey there! Let us know if you have any questions! We'd be happy
-                to help.
-              </IntroCopy>
+              <IntroCopy
+                dangerouslySetInnerHTML={{
+                  __html:
+                    this.props.intro ||
+                    "Hey there! Let us know if you have any questions! We'd be happy to help.",
+                }}
+              />
               {this.props.messages.map(message => {
                 const _previousMessage = previousMessage
                 previousMessage = message

@@ -5,7 +5,7 @@ import { VERIFICATION_TOKEN } from './constants'
 import { CLIENT_ID, CLIENT_SECRET } from './constants'
 import { greet } from './greet'
 import { createOrUpdateNewTeam, findTeam } from '../monk'
-import {addToSlack, loggedIn, upsell} from '../views'
+import { addToSlack, loggedIn, upsell } from '../views'
 
 export async function addNewTeam(
   req: IncomingMessage & { query: { [key: string]: string } },
@@ -24,10 +24,12 @@ export async function addNewTeam(
     error?: string
     access_token: string
     team_id: string
-    incoming_webhook: { // only with Add to slack
+    incoming_webhook: {
+      // only with Add to slack
       channel_id: string
     }
-    team: { // only with Sign in with Slack
+    team: {
+      // only with Sign in with Slack
       id: string
     }
   }

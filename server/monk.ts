@@ -61,7 +61,10 @@ export function findTeam(teamId: string): Promise<ITeam | undefined> {
   return Teams.findOne({ teamId })
 }
 
-export function updateTeam(teamId: string, update: {[key: string]: any}): Promise<void> {
+export function updateTeam(
+  teamId: string,
+  update: { [key: string]: any }
+): Promise<void> {
   return Teams.update({ teamId }, { $set: update })
 }
 
@@ -81,10 +84,13 @@ export function findSocket(
   socketId: string,
   teamId: string
 ): Promise<IThread | undefined> {
-  Threads.update({
-    socketId,
-    teamId
-  }, {$set: {lastSeen: Date.now()}})
+  Threads.update(
+    {
+      socketId,
+      teamId,
+    },
+    { $set: { lastSeen: Date.now() } }
+  )
   return Threads.findOne({
     socketId,
     teamId,
@@ -95,10 +101,13 @@ export function findThread(
   teamId: string,
   threadId: string
 ): Promise<IThread | undefined> {
-  Threads.update({
-    threadId,
-    teamId
-  }, {$set: {lastSeen: Date.now()}})
+  Threads.update(
+    {
+      threadId,
+      teamId,
+    },
+    { $set: { lastSeen: Date.now() } }
+  )
   return Threads.findOne({
     threadId,
     teamId,
@@ -108,6 +117,6 @@ export function findThread(
 export function countThreadsSeenAfter(teamId: string, seenAfter: number) {
   return Threads.count({
     teamId,
-    seenAt: {$gte: seenAfter},
+    seenAt: { $gte: seenAfter },
   })
 }
