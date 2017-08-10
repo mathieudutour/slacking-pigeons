@@ -23,7 +23,7 @@ function getChannelId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).channelId
 }
 
-function getredirectURL(socket: SocketIO.Socket): string {
+function getRedirectURL(socket: SocketIO.Socket): string {
   return (
     (socket.handshake.query || {}).redirectURL ||
     socket.handshake.headers.origin
@@ -37,7 +37,7 @@ export function Websocket(io: SocketIO.Server) {
         const socketId = getSocketId(socket)
         const teamId = getTeamId(socket)
         let channelId = getChannelId(socket)
-        const redirectURL = getredirectURL(socket)
+        const redirectURL = getRedirectURL(socket)
 
         if (!socketId) {
           console.log('no socketId, ignore')
