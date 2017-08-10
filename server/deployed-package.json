@@ -9,10 +9,12 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.95.0",
     "axios": "^0.16.2",
     "micro": "^7.3.3",
     "microrouter": "^2.2.1",
     "monk": "^6.0.3",
+    "nodemailer": "^4.0.1",
     "socket.io": "^2.0.3",
     "stripe": "^4.23.2"
   }
