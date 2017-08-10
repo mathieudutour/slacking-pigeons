@@ -6,7 +6,7 @@ const config = {
   entry: "./src/index.tsx",
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '../server/dist/static')
+    path: path.resolve(__dirname, '../server/dist/server/static')
   },
   resolve: {
     "alias": {
