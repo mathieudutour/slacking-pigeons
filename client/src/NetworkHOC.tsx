@@ -231,4 +231,16 @@ export const NetworkHOC = (
         this._socket.emit('send email', email)
       }
     }
+
+    public open = () => {
+      this.setState({
+        showing: true
+      })
+    }
+
+    public close = () => {
+      this.setState({
+        showing: false
+      })
+    }
   }
