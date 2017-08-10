@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as SocketIOClient from 'socket.io-client'
 import { getSocketId } from './storage'
-import {TMessages, TUser, SpecialMessageType} from '../../MessageTypes'
+import { TMessages, TUser, SpecialMessageType } from '../../MessageTypes'
 
 export type Props = {
   channelId?: string
@@ -58,8 +58,8 @@ export const NetworkHOC = (
           props.teamId +
           '&label=' +
           (props.label || 'default') +
-          (props.channelId ? ('&channel=' + props.channelId) : '') +
-          (props.redirectURL ? ('&redirectURL=' + props.redirectURL) : '')
+          (props.channelId ? '&channel=' + props.channelId : '') +
+          (props.redirectURL ? '&redirectURL=' + props.redirectURL : '')
       )
 
       this._socket.on('new message', this._onNewMessage)
@@ -70,7 +70,7 @@ export const NetworkHOC = (
         process.env.SERVER_HOST + '/history/' + props.teamId + '/' + socketId
       )
         .then(res => res.json())
-        .then(({messages, alreadySentEmail}) => {
+        .then(({ messages, alreadySentEmail }) => {
           this.sentEmail = alreadySentEmail
           this.setState({
             messages: messages
@@ -113,7 +113,7 @@ export const NetworkHOC = (
           name: 'them',
           id: 'them',
           avatar: '',
-        }
+        },
       }
       this.setState({
         messages: this.state.messages.concat({
@@ -134,7 +134,7 @@ export const NetworkHOC = (
           id: 'them',
           avatar: '',
         },
-        special
+        special,
       }
       this.setState({
         messages: this.state.messages.concat({

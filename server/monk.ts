@@ -110,25 +110,38 @@ export function findThread(
   })
 }
 
-export function addEmailAndRedirectToThread(socketId: string,
-  teamId: string, email: string, redirectURL: string) {
-  return Threads.update({
-    socketId,
-    teamId,
-  }, {$set: {
-    email,
-    redirectURL
-  }})
+export function addEmailAndRedirectToThread(
+  socketId: string,
+  teamId: string,
+  email: string,
+  redirectURL: string
+) {
+  return Threads.update(
+    {
+      socketId,
+      teamId,
+    },
+    {
+      $set: {
+        email,
+        redirectURL,
+      },
+    }
+  )
 }
 
-export function recordSendEmail(teamId: string,
-  threadId: string) {
-  return Threads.update({
-    threadId,
-    teamId,
-  }, {$set: {
-    sentEmailAt: Date.now()
-  }})
+export function recordSendEmail(teamId: string, threadId: string) {
+  return Threads.update(
+    {
+      threadId,
+      teamId,
+    },
+    {
+      $set: {
+        sentEmailAt: Date.now(),
+      },
+    }
+  )
 }
 
 export function countThreadsSeenAfter(teamId: string, seenAfter: number) {

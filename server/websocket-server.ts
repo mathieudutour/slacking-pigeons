@@ -1,5 +1,13 @@
 import * as SocketIO from 'socket.io'
-import { findSocket, findThread, IThread, findTeam, ITeam, addEmailAndRedirectToThread, recordSendEmail } from './monk'
+import {
+  findSocket,
+  findThread,
+  IThread,
+  findTeam,
+  ITeam,
+  addEmailAndRedirectToThread,
+  recordSendEmail,
+} from './monk'
 import { postNewMessage, answerInThread, User } from './slack'
 import { sendEmail } from './email'
 
@@ -16,7 +24,10 @@ function getChannelId(socket: SocketIO.Socket): string | undefined {
 }
 
 function getredirectURL(socket: SocketIO.Socket): string {
-  return (socket.handshake.query || {}).redirectURL || socket.handshake.headers.origin
+  return (
+    (socket.handshake.query || {}).redirectURL ||
+    socket.handshake.headers.origin
+  )
 }
 
 export function Websocket(io: SocketIO.Server) {
@@ -78,7 +89,12 @@ export function Websocket(io: SocketIO.Server) {
         })
 
         socket.on('send email', async (email: string) => {
-          await addEmailAndRedirectToThread(socketId, teamId, email, redirectURL)
+          await addEmailAndRedirectToThread(
+            socketId,
+            teamId,
+            email,
+            redirectURL
+          )
         })
       })
     },
@@ -111,7 +127,11 @@ export function Websocket(io: SocketIO.Server) {
                 id,
               })
             )
-          } else if (thread.redirectURL && thread.email && (!thread.sentEmailAt || thread.sentEmailAt < thread.lastSeen!)) {
+          } else if (
+            thread.redirectURL &&
+            thread.email &&
+            (!thread.sentEmailAt || thread.sentEmailAt < thread.lastSeen!)
+          ) {
             sendEmail(thread, teamId, text)
           }
         }

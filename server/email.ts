@@ -5,12 +5,12 @@ import { recordSendEmail, findTeam, IThread } from './monk'
 import { TMessage } from '../MessageTypes'
 
 const transporter = nodemailer.createTransport({
-    SES: new SES({
-      apiVersion: '2010-12-01',
-      accessKeyId: process.env.AWS_KEY_ID,
-      secretAccessKey: process.env.AWS_ACCESS_KEY,
-      region: 'eu-west-1'
-    })
+  SES: new SES({
+    apiVersion: '2010-12-01',
+    accessKeyId: process.env.AWS_KEY_ID,
+    secretAccessKey: process.env.AWS_ACCESS_KEY,
+    region: 'eu-west-1',
+  }),
 })
 
 const outgoingMessage = `
@@ -44,7 +44,11 @@ const emailTemplate = `
 </div>
 `
 
-export async function sendEmail(thread: IThread, teamId: string, message: string) {
+export async function sendEmail(
+  thread: IThread,
+  teamId: string,
+  message: string
+) {
   const team = await findTeam(teamId)
 
   if (!team || !team.premium) {
@@ -56,28 +60,37 @@ export async function sendEmail(thread: IThread, teamId: string, message: string
   const messages = (await getMessages(team, thread)).slice(-5)
   let previousMessage: TMessage
   const text = emailTemplate
-      .replace('{{{USERNAME}}}', messages[messages.length - 1].user.name)
-      .replace('{{{MESSAGES}}}', messages.reduce((prev, m, i) => {
+    .replace('{{{USERNAME}}}', messages[messages.length - 1].user.name)
+    .replace(
+      '{{{MESSAGES}}}',
+      messages.reduce((prev, m, i) => {
         const _previousMessage = previousMessage
         previousMessage = m
-        const group = (_previousMessage && _previousMessage.user.id === m.user.id)
+        const group = _previousMessage && _previousMessage.user.id === m.user.id
         let s = m.user.id === 'me' ? outgoingMessage : incomingMessage
         s = s
-              .replace('{{{GROUP}}}', group ? 'margin-top: -35px;' : '')
-              .replace('{{{AVATAR}}}', !group ? avatar.replace('{{{AVATAR}}}', m.user.avatar) : '')
-              .replace('{{{REDIRECT_URL}}}', thread.redirectURL!)
-              .replace('{{{TEXT}}}', m.text)
+          .replace('{{{GROUP}}}', group ? 'margin-top: -35px;' : '')
+          .replace(
+            '{{{AVATAR}}}',
+            !group ? avatar.replace('{{{AVATAR}}}', m.user.avatar) : ''
+          )
+          .replace('{{{REDIRECT_URL}}}', thread.redirectURL!)
+          .replace('{{{TEXT}}}', m.text)
         return prev + s
-      }, ''))
+      }, '')
+    )
 
-  transporter.sendMail({
-    from: '"Slacking Pigeons" <mathieu@slacking-pigeons.com>',
-    to: thread.email,
-    subject: 'A new answer to your question',
-    text
-  }, (err, info) => {
-    if (err) {
-      console.error(err)
+  transporter.sendMail(
+    {
+      from: '"Slacking Pigeons" <mathieu@slacking-pigeons.com>',
+      to: thread.email,
+      subject: 'A new answer to your question',
+      text,
+    },
+    (err, info) => {
+      if (err) {
+        console.error(err)
+      }
     }
-  })
+  )
 }

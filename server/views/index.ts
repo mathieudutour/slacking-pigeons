@@ -32,7 +32,7 @@ export function addToSlack() {
 export function loggedIn(teamId: string, channelId: string) {
   return serveHTML(assets.loggedIn, {
     TEAM_ID: teamId,
-    CHANNEL_ID: channelId
+    CHANNEL_ID: channelId,
   })
 }
 
@@ -41,6 +41,6 @@ export function upsell(teamId: string, channelId: string, error?: string) {
     TEAM_ID: teamId,
     STRIPE_CLIENT: process.env.STRIPE_CLIENT!,
     ERROR: error || '',
-    CHANNEL_ID: channelId
+    CHANNEL_ID: channelId,
   })
 }

@@ -17,9 +17,7 @@ export class SpecialMessage extends React.Component<Props, { text: string }> {
   }
 
   public shouldComponentUpdate(nextProps: Props) {
-    return (
-      nextProps.special !== this.props.special
-    )
+    return nextProps.special !== this.props.special
   }
 
   public render() {

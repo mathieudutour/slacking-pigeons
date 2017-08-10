@@ -96,18 +96,38 @@ export async function subscribeToPremium(
         break
       case 'StripeAPIError':
         // An error occurred internally with Stripe's API
-        send(res, 500, upsell(body.teamId, team.channels[0], `Stripe failed, sorry about that`))
+        send(
+          res,
+          500,
+          upsell(
+            body.teamId,
+            team.channels[0],
+            `Stripe failed, sorry about that`
+          )
+        )
         break
       case 'StripeConnectionError':
         // Some kind of error occurred during the HTTPS communication
-        send(res, 500, upsell(body.teamId, team.channels[0], `Stripe is down, sorry about that`))
+        send(
+          res,
+          500,
+          upsell(
+            body.teamId,
+            team.channels[0],
+            `Stripe is down, sorry about that`
+          )
+        )
         break
       case 'StripeAuthenticationError':
         // You probably used an incorrect API key
         send(
           res,
           500,
-          upsell(body.teamId, team.channels[0], `How did that happen!? Please ping me.`)
+          upsell(
+            body.teamId,
+            team.channels[0],
+            `How did that happen!? Please ping me.`
+          )
         )
         break
       default:
@@ -116,7 +136,8 @@ export async function subscribeToPremium(
           res,
           500,
           upsell(
-            body.teamId, team.channels[0],
+            body.teamId,
+            team.channels[0],
             `${err.message}. How did that happen!? Please ping me.`
           )
         )

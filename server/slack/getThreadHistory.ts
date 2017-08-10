@@ -9,11 +9,14 @@ import {
   updateTeam,
   countThreadsSeenAfter,
   ITeam,
-  IThread
+  IThread,
 } from '../monk'
-import {TMessages} from '../../MessageTypes'
+import { TMessages } from '../../MessageTypes'
 
-export async function getMessages (team: ITeam, thread: IThread): Promise<TMessages> {
+export async function getMessages(
+  team: ITeam,
+  thread: IThread
+): Promise<TMessages> {
   const replies = await axios({
     method: 'post',
     url: `https://slack.com/api/channels.replies?token=${team.token}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
@@ -99,9 +102,11 @@ export async function getThreadHistory(
 
   const mappedMessages = await getMessages(team, thread)
 
-  res.end(JSON.stringify({
-    messages: mappedMessages,
-    alreadySentEmail: !!thread.email
-  }))
+  res.end(
+    JSON.stringify({
+      messages: mappedMessages,
+      alreadySentEmail: !!thread.email,
+    })
+  )
   return
 }
