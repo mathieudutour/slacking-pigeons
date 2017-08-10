@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 
 const PRODUCTION = process.argv.indexOf('-p') !== -1;
-
 const config = {
   entry: "./src/index.tsx",
   output: {

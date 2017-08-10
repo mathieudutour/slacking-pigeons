@@ -49,6 +49,6 @@ export function postNewMessage(
 export function answerInThread(team: ITeam, message: string, thread: IThread) {
   return axios({
     method: 'post',
-    url: `https://slack.com/api/chat.postMessage?token=${team.token}&text=${message}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
-  })
+    url: `https://slack.com/api/chat.postMessage?token=${team.token}&text=${encodeURIComponent(message)}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
+  }).catch(console.error)
 }

@@ -58,8 +58,8 @@ export const NetworkHOC = (
           props.teamId +
           '&label=' +
           (props.label || 'default') +
-          props.channelId ? ('&channel=' + props.channelId) : '' +
-          props.redirectURL ? ('&redirectURL=' + props.redirectURL) : ''
+          (props.channelId ? ('&channel=' + props.channelId) : '') +
+          (props.redirectURL ? ('&redirectURL=' + props.redirectURL) : '')
       )
 
       this._socket.on('new message', this._onNewMessage)
