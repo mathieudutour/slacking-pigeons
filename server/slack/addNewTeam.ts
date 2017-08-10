@@ -51,9 +51,9 @@ export async function addNewTeam(
     }
 
     if (team.premium) {
-      res.end(loggedIn(body.team.id))
+      res.end(loggedIn(body.team.id, team.channels[0]))
     } else {
-      res.end(upsell(body.team.id))
+      res.end(upsell(body.team.id, team.channels[0]))
     }
   } else {
     // add to slack
@@ -66,7 +66,7 @@ export async function addNewTeam(
     await createOrUpdateNewTeam(team)
     await greet(team)
 
-    res.end(upsell(body.team_id))
+    res.end(upsell(body.team_id, body.incoming_webhook.channel_id))
   }
 
   return

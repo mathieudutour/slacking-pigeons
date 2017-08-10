@@ -28,7 +28,7 @@ export async function subscribeToPremium(
   }
 
   if (team.premium) {
-    send(res, 202, loggedIn(body.teamId))
+    send(res, 202, loggedIn(body.teamId, team.channels[0]))
     return
   }
 
@@ -80,7 +80,7 @@ export async function subscribeToPremium(
       case 'StripeCardError':
         // A declined card error
         const message = err.message // => e.g. "Your card's expiration year is invalid."
-        send(res, 400, upsell(body.teamId, message))
+        send(res, 400, upsell(body.teamId, team.channels[0], message))
         break
       case 'RateLimitError':
         // Too many requests made to the API too quickly
@@ -92,22 +92,22 @@ export async function subscribeToPremium(
         break
       case 'StripeInvalidRequestError':
         // Invalid parameters were supplied to Stripe's API
-        send(res, 400, upsell(body.teamId, `Bad request`))
+        send(res, 400, upsell(body.teamId, team.channels[0], `Bad request`))
         break
       case 'StripeAPIError':
         // An error occurred internally with Stripe's API
-        send(res, 500, upsell(body.teamId, `Stripe failed, sorry about that`))
+        send(res, 500, upsell(body.teamId, team.channels[0], `Stripe failed, sorry about that`))
         break
       case 'StripeConnectionError':
         // Some kind of error occurred during the HTTPS communication
-        send(res, 500, upsell(body.teamId, `Stripe is down, sorry about that`))
+        send(res, 500, upsell(body.teamId, team.channels[0], `Stripe is down, sorry about that`))
         break
       case 'StripeAuthenticationError':
         // You probably used an incorrect API key
         send(
           res,
           500,
-          upsell(body.teamId, `How did that happen!? Please ping me.`)
+          upsell(body.teamId, team.channels[0], `How did that happen!? Please ping me.`)
         )
         break
       default:
@@ -116,7 +116,7 @@ export async function subscribeToPremium(
           res,
           500,
           upsell(
-            body.teamId,
+            body.teamId, team.channels[0],
             `${err.message}. How did that happen!? Please ping me.`
           )
         )
@@ -125,5 +125,5 @@ export async function subscribeToPremium(
     return
   }
 
-  send(res, 200, loggedIn(body.teamId))
+  send(res, 200, loggedIn(body.teamId, team.channels[0]))
 }
