@@ -16,6 +16,7 @@
     window.onSlackingPigeonsReady= function (render) {
       const component = render({
         teamId: 'T6ETXT362',
+        redirectURL: 'https://slacking-pigeons.com',
         onSendMessage(message, instance) {
           if (!instance.sentEmail) {
             setTimeout(() => {
