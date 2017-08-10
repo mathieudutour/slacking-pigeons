@@ -10,12 +10,17 @@ const assets = {
   loggedIn: fs.readFileSync(path.join(__dirname, './logged-in.html'), 'utf-8'),
   upsell: fs.readFileSync(path.join(__dirname, './upsell.html'), 'utf-8'),
   index: fs.readFileSync(path.join(__dirname, './index.html'), 'utf-8'),
+  privacy: fs.readFileSync(path.join(__dirname, './privacy.html'), 'utf-8'),
 }
 
 export function index() {
   return serveHTML(assets.index, {
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID!,
   })
+}
+
+export function privacy() {
+  return serveHTML(assets.privacy, {})
 }
 
 export function addToSlack() {

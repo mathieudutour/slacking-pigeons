@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { TUser } from './NetworkHOC'
+import { TUser } from '../../MessageTypes'
 import { replaceSlackEmojis } from './emojis'
 
 const MessageContainer = styled.div`padding: 0 35px 40px;`
@@ -30,7 +30,7 @@ const Comment = styled.div`
 const Avatar = styled.div`
   position: absolute;
   left: 0;
-  bottom: 10px
+  bottom: 10px;
   width: 32px;
   height: 32px;
   margin: 0 auto;

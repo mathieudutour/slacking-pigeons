@@ -4,7 +4,7 @@ import { json, send } from 'micro'
 import { VERIFICATION_TOKEN } from './constants'
 import { GREET_MESSAGE } from './greet'
 import { handlers } from './handlers'
-import { users, getSlackUser } from './users'
+import { getSlackUser } from './users'
 
 import { findTeam, updateTeam, ITeam } from '../monk'
 
@@ -88,10 +88,7 @@ export async function slackEventHandler(
         // console.log(event)
       } else if (!isOurBot(event.bot_id, team) && threadId) {
         // if we are in a thread and we haven't sent it
-        let user = users[event.user]
-        if (!user) {
-          user = await getSlackUser(team, event.user)
-        }
+        const user = await getSlackUser(team, event.user)
         handlers.newMessage.forEach(handler => {
           handler({
             teamId: team.teamId,

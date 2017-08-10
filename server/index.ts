@@ -9,7 +9,7 @@ import * as stripe from './stripe'
 import * as monk from './monk'
 import { Websocket } from './websocket-server'
 import { cors } from './cors'
-import { index } from './views'
+import { index, privacy } from './views'
 
 if (!process.env.SLACK_CLIENT_ID) {
   console.error('missing slack client ID')
@@ -22,18 +22,22 @@ if (!process.env.SLACK_CLIENT_SECRET) {
 }
 
 const assets = {
-  html: index(),
+  index: index(),
+  privacy: privacy(),
   js: fs.readFileSync(path.join(__dirname, './static/bundle.js'), 'utf-8'),
   css: fs.readFileSync(path.join(__dirname, './static/style.css'), 'utf-8'),
 }
 
-const staticServing = (key: 'html' | 'js' | 'css') => async (
+const staticServing = (key: 'index' | 'js' | 'css' | 'privacy') => async (
   req: IncomingMessage,
   res: ServerResponse
 ) => {
-  if (key === 'html') {
+  if (key === 'index') {
     res.setHeader('Content-Type', 'text/html')
-    res.end(index())
+    res.end(assets.index)
+  } else if (key === 'privacy') {
+    res.setHeader('Content-Type', 'text/html')
+    res.end(assets.privacy)
   } else {
     res.end(assets[key])
   }
@@ -42,7 +46,8 @@ const staticServing = (key: 'html' | 'js' | 'css') => async (
 const server = micro(
   cors(
     router(
-      get('/', staticServing('html')),
+      get('/', staticServing('index')),
+      get('/privacy', staticServing('privacy')),
       get('/bundle.js', staticServing('js')),
       get('/style.css', staticServing('css')),
       get('/history/:team/:socket', slack.getThreadHistory),

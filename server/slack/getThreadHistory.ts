@@ -8,7 +8,61 @@ import {
   findTeam,
   updateTeam,
   countThreadsSeenAfter,
+  ITeam,
+  IThread
 } from '../monk'
+import {TMessages} from '../../MessageTypes'
+
+export async function getMessages (team: ITeam, thread: IThread): Promise<TMessages> {
+  const replies = await axios({
+    method: 'post',
+    url: `https://slack.com/api/channels.replies?token=${team.token}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
+  })
+
+  const messages = replies.data.messages || []
+
+  const bot_id = messages[0].bot_id
+
+  if (!team.bot_id) {
+    await updateTeam(team.teamId, {
+      bot_id: messages[0].bot_id,
+    })
+  }
+
+  const me = {
+    name: 'me',
+    id: 'me',
+    avatar: '',
+  }
+
+  const userIds = messages
+    .map((m: any) => m.user)
+    .reduce((prev: { [key: string]: 1 }, userId: string) => {
+      if (userId && !prev[userId]) {
+        prev[userId] = 1
+      }
+      return prev
+    }, {})
+
+  await Promise.all(
+    Object.keys(userIds).map(userId => getSlackUser(team, userId))
+  )
+
+  return messages.map((m: any, i: number) => {
+    if (i === 0) {
+      return {
+        user: me,
+        text: m.attachments[0].text,
+        id: m.ts,
+      }
+    }
+    return {
+      user: m.user ? users[m.user] : me,
+      text: m.text,
+      id: m.ts,
+    }
+  })
+}
 
 export async function getThreadHistory(
   req: IncomingMessage & { params: { [key: string]: string } },
@@ -39,59 +93,15 @@ export async function getThreadHistory(
   const thread = await findSocket(socketId, team.teamId)
 
   if (!thread) {
-    res.end('[]')
+    res.end('{"messages": [], "alreadySentEmail": false}')
     return
   }
 
-  const replies = await axios({
-    method: 'post',
-    url: `https://slack.com/api/channels.replies?token=${team.token}&thread_ts=${thread.threadId}&channel=${thread.channel}`,
-  })
+  const mappedMessages = await getMessages(team, thread)
 
-  const messages = replies.data.messages || []
-
-  const bot_id = messages[0].bot_id
-
-  if (!team.bot_id) {
-    await updateTeam(teamId, {
-      bot_id: messages[0].bot_id,
-    })
-  }
-
-  const me = {
-    name: 'me',
-    id: 'me',
-    avatar: '',
-  }
-
-  const userIds = messages
-    .map((m: any) => m.user)
-    .reduce((prev: { [key: string]: 1 }, userId: string) => {
-      if (userId && !prev[userId]) {
-        prev[userId] = 1
-      }
-      return prev
-    }, {})
-
-  await Promise.all(
-    Object.keys(userIds).map(userId => getSlackUser(team, userId))
-  )
-
-  const mappedMessages = messages.map((m: any, i: number) => {
-    if (i === 0) {
-      return {
-        user: me,
-        text: m.attachments[0].text,
-        id: m.ts,
-      }
-    }
-    return {
-      user: m.user ? users[m.user] : me,
-      text: m.text,
-      id: m.ts,
-    }
-  })
-
-  res.end(JSON.stringify(mappedMessages))
+  res.end(JSON.stringify({
+    messages: mappedMessages,
+    alreadySentEmail: !!thread.email
+  }))
   return
 }

@@ -20,8 +20,17 @@
 <script>
   window.onSlackingPigeonsReady = function (render) {
     var slackingPigeons = render({
-      teamId: 'T6J34NHRN'
+      teamId: 'T6J34NHRN',
+      onSendMessage(message, instance) {
+        if (!instance.sentEmail) {
+          setTimeout(() => {
+            instance.addSpecialMessage('email-input')
+          }, 1000)
+        }
+      },
+      redirectURL: 'https://slacking-pigeons.com'
     })
+
   }
 </script>
 

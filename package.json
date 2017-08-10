@@ -18,6 +18,7 @@
   "devDependencies": {
     "@types/micro": "^7.3.0",
     "@types/microrouter": "^2.2.0",
+    "@types/nodemailer": "^3.1.1",
     "@types/react-dom": "^15.5.1",
     "@types/react-textarea-autosize": "^4.3.1",
     "@types/socket.io": "^1.4.29",

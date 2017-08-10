@@ -2,9 +2,9 @@
   "name": "slacking-pigeons",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node server/index.js"
   },
   "author": "",
   "license": "MIT",

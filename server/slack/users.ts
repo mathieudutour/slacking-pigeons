@@ -8,10 +8,14 @@ export type User = {
 }
 
 export const users: {
-  [userId: string]: User
+  [TeamIdPlususerId: string]: User
 } = {}
 
-export function getSlackUser(team: ITeam, userId: string): Promise<User> {
+export function getSlackUser(team: ITeam, userId: string) {
+  const id = team.teamId + '-' + userId
+  if (users[id]) {
+    return users[id]
+  }
   return axios({
     method: 'post',
     url: `https://slack.com/api/users.info?token=${team.token}&user=${userId}`,

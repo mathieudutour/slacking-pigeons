@@ -2,8 +2,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Input } from './Input'
 import { Message } from './Message'
+import { SpecialMessage } from './SpecialMessage'
 import { ToggleButton } from './ToggleButton'
-import { NetworkHOC, TMessages, TMessage } from './NetworkHOC'
+import { NetworkHOC } from './NetworkHOC'
+import { TMessages, TMessage } from '../../MessageTypes'
 
 type Props = {
   messages: TMessages
@@ -11,6 +13,7 @@ type Props = {
   color?: string
   showing?: boolean
   intro?: string
+  onSendEmail: (email: string) => void
 }
 
 const Container = styled.div`
@@ -27,6 +30,10 @@ const Container = styled.div`
   overflow: hidden;
   opacity: 1;
   background-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+	line-height: 1.5;
+	color: #24292e;
 `
 
 const MessagesContainer = styled.div`
@@ -105,6 +112,10 @@ class Chat extends React.Component<Props, { open: boolean }> {
               {this.props.messages.map(message => {
                 const _previousMessage = previousMessage
                 previousMessage = message
+                const special = message.special
+                if (typeof special !== 'undefined') {
+                  return <SpecialMessage key={message.id} {...message} special={special} color={this.props.color} onSendEmail={this.props.onSendEmail} />
+                }
                 return (
                   <Message
                     key={message.id}

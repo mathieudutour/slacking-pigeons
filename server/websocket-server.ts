@@ -1,6 +1,7 @@
-import { findSocket, findThread, IThread, findTeam, ITeam } from './monk'
-import { postNewMessage, answerInThread, User } from './slack'
 import * as SocketIO from 'socket.io'
+import { findSocket, findThread, IThread, findTeam, ITeam, addEmailAndRedirectToThread, recordSendEmail } from './monk'
+import { postNewMessage, answerInThread, User } from './slack'
+import { sendEmail } from './email'
 
 function getSocketId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).socketId
@@ -14,6 +15,10 @@ function getChannelId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).channelId
 }
 
+function getredirectURL(socket: SocketIO.Socket): string {
+  return (socket.handshake.query || {}).redirectURL || socket.handshake.headers.origin
+}
+
 export function Websocket(io: SocketIO.Server) {
   return {
     startServer() {
@@ -21,6 +26,7 @@ export function Websocket(io: SocketIO.Server) {
         const socketId = getSocketId(socket)
         const teamId = getTeamId(socket)
         let channelId = getChannelId(socket)
+        const redirectURL = getredirectURL(socket)
 
         if (!socketId) {
           console.log('no socketId, ignore')
@@ -70,6 +76,10 @@ export function Websocket(io: SocketIO.Server) {
             })
           )
         })
+
+        socket.on('send email', async (email: string) => {
+          await addEmailAndRedirectToThread(socketId, teamId, email, redirectURL)
+        })
       })
     },
 
@@ -86,10 +96,10 @@ export function Websocket(io: SocketIO.Server) {
       threadId: string
       id: string
     }) {
-      return findThread(teamId, threadId).then(res => {
-        if (res) {
+      return findThread(teamId, threadId).then(thread => {
+        if (thread) {
           const socket = Object.keys(io.sockets.sockets).find(k => {
-            return getSocketId(io.sockets.sockets[k]) === res.socketId
+            return getSocketId(io.sockets.sockets[k]) === thread.socketId
           })
 
           if (socket) {
@@ -101,6 +111,8 @@ export function Websocket(io: SocketIO.Server) {
                 id,
               })
             )
+          } else if (thread.redirectURL && thread.email && (!thread.sentEmailAt || thread.sentEmailAt < thread.lastSeen!)) {
+            sendEmail(thread, teamId, text)
           }
         }
       })

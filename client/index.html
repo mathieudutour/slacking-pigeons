@@ -14,8 +14,15 @@
   <a href="https://slack.com/oauth/authorize?scope=identity.basic&client_id=218949921206.223431824054"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
   <script>
     window.onSlackingPigeonsReady= function (render) {
-      render({
-        teamId: 'T6ETXT362'
+      const component = render({
+        teamId: 'T6ETXT362',
+        onSendMessage(message, instance) {
+          if (!instance.sentEmail) {
+            setTimeout(() => {
+              instance.addSpecialMessage('email-input')
+            }, 300)
+          }
+        }
       })
     }
   </script>

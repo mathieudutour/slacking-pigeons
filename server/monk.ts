@@ -31,6 +31,9 @@ export interface IThread {
   readonly socketId: string
   readonly channel: string
   lastSeen?: number
+  sentEmailAt?: number
+  readonly email?: string
+  readonly redirectURL?: string
 }
 
 export function createOrUpdateNewTeam(team: IChannel): Promise<void> {
@@ -101,17 +104,31 @@ export function findThread(
   teamId: string,
   threadId: string
 ): Promise<IThread | undefined> {
-  Threads.update(
-    {
-      threadId,
-      teamId,
-    },
-    { $set: { lastSeen: Date.now() } }
-  )
   return Threads.findOne({
     threadId,
     teamId,
   })
+}
+
+export function addEmailAndRedirectToThread(socketId: string,
+  teamId: string, email: string, redirectURL: string) {
+  return Threads.update({
+    socketId,
+    teamId,
+  }, {$set: {
+    email,
+    redirectURL
+  }})
+}
+
+export function recordSendEmail(teamId: string,
+  threadId: string) {
+  return Threads.update({
+    threadId,
+    teamId,
+  }, {$set: {
+    sentEmailAt: Date.now()
+  }})
 }
 
 export function countThreadsSeenAfter(teamId: string, seenAfter: number) {

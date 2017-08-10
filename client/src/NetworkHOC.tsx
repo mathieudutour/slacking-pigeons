@@ -1,22 +1,7 @@
 import * as React from 'react'
 import * as SocketIOClient from 'socket.io-client'
 import { getSocketId } from './storage'
-
-export type TUser = {
-  id: string
-  name: string
-  avatar: string
-}
-
-export type TMessage = {
-  text: string
-  id: string
-  user: TUser
-  sent?: boolean
-  received?: boolean
-  read?: boolean
-}
-export type TMessages = Array<TMessage>
+import {TMessages, TUser, SpecialMessageType} from '../../MessageTypes'
 
 export type Props = {
   channelId?: string
@@ -24,6 +9,8 @@ export type Props = {
   teamId: string
   color?: string
   intro?: string
+  onSendMessage?: (message: string, instance: React.Component) => void
+  redirectURL?: string
 }
 
 let tempId = 0
@@ -36,6 +23,7 @@ export const NetworkHOC = (
     color?: string
     showing?: boolean
     intro?: string
+    onSendEmail: (email: string) => void
   }>
 ) =>
   class HookedChat extends React.Component<
@@ -46,6 +34,7 @@ export const NetworkHOC = (
     }
   > {
     private _socket: SocketIOClient.Socket
+    public sentEmail: boolean
 
     public constructor(props: Props) {
       super(props)
@@ -69,8 +58,8 @@ export const NetworkHOC = (
           props.teamId +
           '&label=' +
           (props.label || 'default') +
-          '&channel=' +
-          props.channelId
+          props.channelId ? ('&channel=' + props.channelId) : '' +
+          props.redirectURL ? ('&redirectURL=' + props.redirectURL) : ''
       )
 
       this._socket.on('new message', this._onNewMessage)
@@ -81,7 +70,8 @@ export const NetworkHOC = (
         process.env.SERVER_HOST + '/history/' + props.teamId + '/' + socketId
       )
         .then(res => res.json())
-        .then(messages => {
+        .then(({messages, alreadySentEmail}) => {
+          this.sentEmail = alreadySentEmail
           this.setState({
             messages: messages
               .map((m: { user: TUser; text: string; id: string }) => {
@@ -110,6 +100,7 @@ export const NetworkHOC = (
           onSendMessage={this._onSendMessage}
           color={this.props.color}
           intro={this.props.intro}
+          onSendEmail={this._onSendEmail}
         />
       )
     }
@@ -122,7 +113,28 @@ export const NetworkHOC = (
           name: 'them',
           id: 'them',
           avatar: '',
+        }
+      }
+      this.setState({
+        messages: this.state.messages.concat({
+          ...message,
+          sent: true,
+          received: true,
+          read: false,
+        }),
+      })
+    }
+
+    public addSpecialMessage = (special: SpecialMessageType) => {
+      const message = {
+        text: '',
+        id: 'artificial' + artificialId++,
+        user: {
+          name: 'them',
+          id: 'them',
+          avatar: '',
         },
+        special
       }
       this.setState({
         messages: this.state.messages.concat({
@@ -208,6 +220,15 @@ export const NetworkHOC = (
       })
       if (this._socket) {
         this._socket.emit('chat message', message)
+      }
+      if (this.props.onSendMessage) {
+        this.props.onSendMessage(message, this)
+      }
+    }
+
+    private _onSendEmail = (email: string) => {
+      if (this._socket) {
+        this._socket.emit('send email', email)
       }
     }
   }
