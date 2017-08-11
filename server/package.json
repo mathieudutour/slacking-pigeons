@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && mkdir -p dist/server && cp -r views dist/server/views && cp -r .elasticbeanstalk dist/.elasticbeanstalk && cp deployed-package.json dist/package.json && cp -r static dist/server/static && ../node_modules/.bin/tsc --p ./tsconfig.json",
+    "build": "rm -rf dist && mkdir -p dist/server && cp -r views dist/server/views && cp -r .elasticbeanstalk dist/.elasticbeanstalk && cp -r .ebextensions dist/.ebextensions && cp deployed-package.json dist/package.json && cp -r static dist/server/static && ../node_modules/.bin/tsc --p ./tsconfig.json",
     "start": "ts-node index.ts",
     "watch": "npm run build && concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run build -- -w\" \"npm run serve\"",
     "serve": "source ../.env && AWS_KEY_ID=$AWS_KEY_ID AWS_ACCESS_KEY=$AWS_ACCESS_KEY STRIPE_SECRET=$STRIPE_SECRET STRIPE_CLIENT=$STRIPE_CLIENT STRIPE_ENDPOINT_SECRET=$STRIPE_ENDPOINT_SECRET SLACK_CLIENT_ID=$SLACK_CLIENT_ID SLACK_VERIFICATION_TOKEN=$SLACK_VERIFICATION_TOKEN SLACK_CLIENT_SECRET=$SLACK_CLIENT_SECRET  MONGO_URL=$MONGO_URL nodemon dist/server/index.js"
