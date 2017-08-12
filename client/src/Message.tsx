@@ -10,12 +10,14 @@ const IncomingMessage = styled.div`
   padding-left: 45px;
   position: relative;
   max-width: 75%;
+  overflow-x: hidden;
 `
 
 const OutgoingMessage = styled.div`
   float: right;
   position: relative;
   max-width: 75%;
+  overflow-x: hidden;
 `
 
 const Comment = styled.div`
