@@ -33,7 +33,7 @@ If you can't find an issue that matches what you're seeing, open a [new issue](h
 
 ## :bird: How can I contribute to Slacking Pigeons?
 
-If you're looking for something to work on, check out the [accepting-prs](https://github.com/kactus-io/kactus/issues?q=is%3Aopen+is%3Aissue+label%3Aaccepting-prs) label.
+If you're looking for something to work on, check out the [accepting-prs](https://github.com/mathieudutour/slacking-pigeons/issues?q=is%3Aopen+is%3Aissue+label%3Aaccepting-prs) label.
 
 Here is how to get started with a developer environment:
 ```
