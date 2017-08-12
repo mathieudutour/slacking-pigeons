@@ -1,6 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import textarea from 'react-textarea-autosize'
+import {PigeonIcon} from './PigeonIcon'
 
 const KEY_ENTER = 13
 
@@ -15,7 +16,7 @@ const Textarea = styled(textarea)`
   transition: background-color .2s ease, box-shadow .2s ease;
   box-sizing: border-box;
   padding: 18px;
-  padding-right: 30px;
+  padding-right: 45px;
   padding-left: 30px;
   width: 100%;
   font-size: 15px;
@@ -31,6 +32,18 @@ const Textarea = styled(textarea)`
   }
 `
 
+const SendButton = styled.button`
+  background: transparent;
+  border: none;
+  outline: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 5px;
+  opacity: 0.4;
+  cursor: pointer;
+`
+
 type Props = {
   onSendMessage: (msg: string) => void
   alreadyAMessage: boolean
@@ -40,7 +53,6 @@ export class Input extends React.Component<
   Props,
   {
     message: string
-    gooey: boolean
   }
 > {
   public constructor(props: Props) {
@@ -48,13 +60,12 @@ export class Input extends React.Component<
 
     this.state = {
       message: '',
-      gooey: false,
     }
   }
 
   public render() {
     return (
-      <div className="chat-input-bar">
+      <div>
         <Textarea
           style={{
             minHeight: '55px',
@@ -69,9 +80,9 @@ export class Input extends React.Component<
           onChange={this._onChange}
           onKeyDown={this._onKeyDown}
         />
-        <div className="chat-send" onClick={this._onSendMessage}>
-          <i className="fa fa-paper-plane" />
-        </div>
+        <SendButton onClick={this._onSendMessage} title="Send message">
+          <PigeonIcon color="#565867" />
+        </SendButton>
       </div>
     )
   }

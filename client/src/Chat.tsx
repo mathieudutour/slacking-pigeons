@@ -147,7 +147,9 @@ class Chat extends React.Component<Props, { open: boolean }> {
     )
   }
 
-  private _onRef = (c: HTMLDivElement) => (this._messagesContainer = c)
+  private _onRef = (c: HTMLDivElement) => {
+    this._messagesContainer = c
+  }
 
   private _toggleOpen = () => {
     this.setState({
