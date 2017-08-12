@@ -4,4 +4,4 @@ cd server/dist
 git init
 git add .
 git commit -m 'deploying'
-eb deploy slacking-pigeons-prod
+eb deploy slacking-pigeons-prod2
