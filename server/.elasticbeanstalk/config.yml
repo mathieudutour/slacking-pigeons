@@ -1,6 +1,6 @@
 branch-defaults:
   default:
-    environment: slacking-pigeons-prod
+    environment: slacking-pigeons-prod2
     group_suffix: null
 global:
   application_name: slacking-pigeons
