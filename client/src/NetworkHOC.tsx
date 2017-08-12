@@ -136,6 +136,9 @@ export const NetworkHOC = (
         },
         special,
       }
+      if (special === SpecialMessageType.EmailInput) {
+        this.sentEmail = true
+      }
       this.setState({
         messages: this.state.messages.concat({
           ...message,
