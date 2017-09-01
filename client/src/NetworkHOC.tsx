@@ -5,7 +5,7 @@ import { TMessages, TUser, SpecialMessageType } from '../../MessageTypes'
 
 export type Props = {
   channelId?: string
-  label?: string
+  labels?: string
   teamId: string
   color?: string
   intro?: string
@@ -56,8 +56,8 @@ export const NetworkHOC = (
           socketId +
           '&teamId=' +
           props.teamId +
-          '&label=' +
-          (props.label || 'default') +
+          '&labels=' +
+          encodeURIComponent(JSON.stringify(props.labels || {})) +
           (props.channelId ? '&channel=' + props.channelId : '') +
           (props.redirectURL ? '&redirectURL=' + props.redirectURL : '')
       )

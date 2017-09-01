@@ -6,7 +6,8 @@ export function postNewMessage(
   team: ITeam,
   message: string,
   socketId: string,
-  channelId: string
+  channelId: string,
+  labels: {[key: string]: string}
 ) {
   return axios({
     method: 'post',
@@ -40,6 +41,11 @@ export function postNewMessage(
               },
             },
           ],
+          fields: Object.keys(labels).map(k => ({
+            title: k,
+            value: labels[k],
+            short: true
+          })),
         },
       ])
     )}&channel=${channelId}`,

@@ -23,6 +23,14 @@ function getChannelId(socket: SocketIO.Socket): string | undefined {
   return (socket.handshake.query || {}).channelId
 }
 
+function getLabels(socket: SocketIO.Socket): {[key: string]: string} {
+  try {
+    return JSON.parse((socket.handshake.query || {}).labels)
+  } catch (e) {
+    return {}
+  }
+}
+
 function getRedirectURL(socket: SocketIO.Socket): string {
   return (
     (socket.handshake.query || {}).redirectURL ||
@@ -38,6 +46,7 @@ export function Websocket(io: SocketIO.Server) {
         const teamId = getTeamId(socket)
         let channelId = getChannelId(socket)
         const redirectURL = getRedirectURL(socket)
+        const labels = getLabels(socket)
 
         if (!socketId) {
           console.log('no socketId, ignore')
@@ -77,7 +86,7 @@ export function Websocket(io: SocketIO.Server) {
             if (!channelId) {
               channelId = team.channels[0]
             }
-            postNewMessage(team, msg, socketId, channelId)
+            postNewMessage(team, msg, socketId, channelId, labels)
           }
 
           socket.emit(

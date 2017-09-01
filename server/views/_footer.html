@@ -21,6 +21,9 @@
   window.onSlackingPigeonsReady = function (render) {
     var slackingPigeons = render({
       teamId: 'T6J34NHRN',
+      labels: {
+        from: 'web'
+      },
       onSendMessage(message, instance) {
         if (!instance.sentEmail) {
           setTimeout(() => {
