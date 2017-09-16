@@ -24,11 +24,15 @@ export async function getMessages(
 
   const messages = replies.data.messages || []
 
+  if (!messages.length) {
+    return messages
+  }
+
   const bot_id = messages[0].bot_id
 
   if (!team.bot_id) {
     await updateTeam(team.teamId, {
-      bot_id: messages[0].bot_id,
+      bot_id,
     })
   }
 
