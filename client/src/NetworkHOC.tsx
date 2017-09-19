@@ -58,7 +58,7 @@ export const NetworkHOC = (
           props.teamId +
           '&labels=' +
           encodeURIComponent(JSON.stringify(props.labels || {})) +
-          (props.channelId ? '&channel=' + props.channelId : '') +
+          (props.channelId ? '&channelId=' + props.channelId : '') +
           (props.redirectURL ? '&redirectURL=' + props.redirectURL : '')
       )
 
@@ -237,13 +237,13 @@ export const NetworkHOC = (
 
     public open = () => {
       this.setState({
-        showing: true
+        showing: true,
       })
     }
 
     public close = () => {
       this.setState({
-        showing: false
+        showing: false,
       })
     }
   }
